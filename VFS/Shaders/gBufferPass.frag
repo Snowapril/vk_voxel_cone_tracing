@@ -1,0 +1,105 @@
+#version 450
+
+#include "gltf.glsl"
+
+layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM = 69;
+
+layout (location = 0) in VS_OUT {
+	vec3 normal;
+	vec2 texCoord;
+	vec3 tangent;
+	vec3 bitangent;
+} fs_in;
+
+layout (location = 0) out vec4 diffuse;
+layout (location = 1) out vec4 normal;
+layout (location = 2) out vec4 specular;
+layout (location = 3) out vec4 emission;
+
+
+layout ( std430, set = 1, binding = 1) readonly buffer MaterialBuffer
+{
+	GltfShadeMaterial uMaterials[];
+};
+
+layout ( set = 1, binding = 2 ) uniform sampler2D uTextures[MAX_TEXTURE_NUM];
+
+layout ( push_constant ) uniform PushConstants
+{
+	uint uInstanceIndex;
+	uint uMaterialIndex;
+};
+
+#define MIN_ROUGHNESS 0.04
+
+vec4 SRGBtoLinear(vec4 srgbIn, float gamma)
+{
+	return vec4(pow(srgbIn.xyz, vec3(gamma)), srgbIn.w);
+}
+
+vec3 getNormal(int normalTexture)
+{
+	if (normalTexture > -1)
+	{
+		vec3 normalSample = texture(uTextures[normalTexture], fs_in.texCoord).rgb;
+		normalSample = 2.0 * normalSample - 1.0;
+		
+		return normalize(
+			normalSample.x * normalize(fs_in.tangent) + 
+			normalSample.y * normalize(fs_in.bitangent) + 
+			normalSample.z * normalize(fs_in.normal)
+		);
+	}
+	else
+	{
+		return normalize(fs_in.normal);
+	}
+}
+
+void main()
+{
+	GltfShadeMaterial material = uMaterials[uMaterialIndex];
+
+	vec3 diffuseColor			= vec3(0.0);
+	vec3 specularColor			= vec3(0.0);
+	vec4 baseColor				= vec4(0.0, 0.0, 0.0, 1.0);
+	vec3 f0						= vec3(0.04);
+	float perceptualRoughness;
+	float metallic;
+
+	perceptualRoughness = material.pbrRoughnessFactor;
+	metallic = material.pbrMetallicFactor;
+	//! Roughness is stored in the 'g' channel, metallic is stored in the 'b' channel
+	//! This layout intentionally reserves the	 'r' channel for (optional) occlusion map data
+	if (material.pbrMetallicRoughnessTexture > -1)
+	{
+		vec4 mrSample = texture(uTextures[material.pbrMetallicRoughnessTexture], fs_in.texCoord);
+		perceptualRoughness *= mrSample.g;
+		metallic *= mrSample.b;
+	}
+	else
+	{
+		perceptualRoughness = clamp(perceptualRoughness, MIN_ROUGHNESS, 1.0);
+		metallic = clamp(metallic, 0.0, 1.0);
+	}
+
+	baseColor = material.pbrBaseColorFactor;
+	if (material.pbrBaseColorTexture > -1)
+		baseColor *= texture(uTextures[material.pbrBaseColorTexture], fs_in.texCoord);
+	diffuseColor = baseColor.rgb * (vec3(1.0) - f0) * (1.0 - metallic);
+	specularColor = mix(f0, baseColor.rgb, metallic);
+
+	if (material.alphaMode > 0 && baseColor.a < material.alphaCutoff)
+		discard;
+
+	diffuse   = vec4(diffuseColor, perceptualRoughness);
+	specular = vec4(specularColor, metallic);
+	normal 	 = vec4(getNormal(material.normalTexture) * 0.5 + 0.5, 1.0);
+
+	vec3 emissionColor 			= vec3(0.0, 0.0, 0.0);
+	if (material.emissiveTexture > -1)
+	{
+		emissionColor = SRGBtoLinear(texture(uTextures[material.emissiveTexture], fs_in.texCoord), 2.2).rgb * material.emissiveFactor;
+	}
+	emission = vec4(emissionColor, 1.0);
+}

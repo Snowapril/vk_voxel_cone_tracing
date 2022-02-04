@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{9db11675-0062-4a5a-8d31-9c3e27af64dd}</ProjectGuid>
+    <RootNamespace>VFS</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;$(MSBuildProjectDirectory);$(MSBuildProjectDirectory)\Includes;$(MSBuildProjectDirectory)\..\Dependencies;$(MSBuildProjectDirectory)\..</AdditionalIncludeDirectories>
+      <TreatSpecificWarningsAsErrors>4242;4254;4265;4599;4605;4608;4800;4826;4928;4946;4986;5031;5032;4263;4264;4545;4546;4547;4548;4549;5038;4062;4165;4191;4287;4296;4339;4350;4370;4388;4444;4464;4555;4557;4571;4577;4596;4598;4619;4628;4643;4647;4654;4686;4749;4767;4768;4774;4777;4786;4822;4837;4841;4842;4868;4905;4906;4917;4931;4962;4987;4988;5022;5023;5024;5025;5029;5034;5035;5036;5042;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
+      <DisableSpecificWarnings>4100;4127;4201;4714;4471;4189;26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>Common\pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(OutputPath)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;VkLayer_utils.lib;imgui-d.lib;vfsvulkanframework-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent />
+    <PreBuildEvent>
+      <Message>Compile glsl shader into SPIR-V binary data</Message>
+      <Command>for %%i in ($(ProjectDir)\Shaders\*.vert, $(ProjectDir)\Shaders\*.frag, $(ProjectDir)\Shaders\*.geom, $(ProjectDir)\Shaders\*.comp) do glslc "%%i" -o "%%i.spv"
+xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;$(MSBuildProjectDirectory);$(MSBuildProjectDirectory)\Includes;$(MSBuildProjectDirectory)\..\Dependencies;$(MSBuildProjectDirectory)\..</AdditionalIncludeDirectories>
+      <TreatSpecificWarningsAsErrors>4242;4254;4265;4599;4605;4608;4800;4826;4928;4946;4986;5031;5032;4263;4264;4545;4546;4547;4548;4549;5038;4062;4165;4191;4287;4296;4339;4350;4370;4388;4444;4464;4555;4557;4571;4577;4596;4598;4619;4628;4643;4647;4654;4686;4749;4767;4768;4774;4777;4786;4822;4837;4841;4842;4868;4905;4906;4917;4931;4962;4987;4988;5022;5023;5024;5025;5029;5034;5035;5036;5042;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
+      <DisableSpecificWarnings>4100;4127;4201;4714;4471;4189;26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>Common\pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(OutputPath)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PreBuildEvent />
+    <PreBuildEvent>
+      <Message>Compile glsl shader into SPIR-V binary data</Message>
+      <Command>for %%i in ($(ProjectDir)\Shaders\*.vert, $(ProjectDir)\Shaders\*.frag, $(ProjectDir)\Shaders\*.geom, $(ProjectDir)\Shaders\*.comp) do glslc "%%i" -o "%%i.spv"
+xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\Application.cpp" />
+    <ClCompile Include="Sources\Common\CPUTimer.cpp" />
+    <ClCompile Include="Sources\Common\GLTFLoader.cpp" />
+    <ClCompile Include="Sources\Common\Utils.cpp" />
+    <ClCompile Include="Sources\DirectionalLight.cpp" />
+    <ClCompile Include="Sources\GLTFScene.cpp" />
+    <ClCompile Include="Sources\LoaderThread.cpp" />
+    <ClCompile Include="Sources\Renderer.cpp" />
+    <ClCompile Include="Sources\RenderPass\DownSampler.cpp" />
+    <ClCompile Include="Sources\RenderPass\GBufferDebugPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\GBufferPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\RadianceInjectionPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\RenderPassBase.cpp" />
+    <ClCompile Include="Sources\RenderPass\RenderPassManager.cpp" />
+    <ClCompile Include="Sources\RenderPass\ShadowMapPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\VolumeVisualizerPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\VoxelConeTracingPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\VoxelizationPass.cpp" />
+    <ClCompile Include="Sources\RenderPass\Voxelizer.cpp" />
+    <ClCompile Include="Sources\SwapChain.cpp" />
+    <ClCompile Include="Sources\VolumeVisualizer.cpp" />
+    <ClCompile Include="Sources\VoxelEngine\OctreeBuilder.cpp" />
+    <ClCompile Include="Sources\VoxelEngine\Counter.cpp" />
+    <ClCompile Include="Sources\VoxelEngine\OctreeVisualizer.cpp" />
+    <ClCompile Include="Sources\VoxelEngine\OctreeVoxelConeTracing.cpp" />
+    <ClCompile Include="Sources\VoxelEngine\SparseVoxelizer.cpp" />
+    <ClInclude Include="Includes\Application.h" />
+    <ClInclude Include="Includes\BoundingBox.h" />
+    <ClInclude Include="Includes\Common\CPUTimer.h" />
+    <ClInclude Include="Includes\DirectionalLight.h" />
+    <ClInclude Include="Includes\GLTFScene.h" />
+    <ClInclude Include="Includes\RenderPass\DownSampler.h" />
+    <ClInclude Include="Includes\LoaderThread.h" />
+    <ClInclude Include="Includes\Common\AssetLoader.h" />
+    <ClInclude Include="Includes\Common\EngineConfig.h" />
+    <ClInclude Include="Includes\Common\GLTFLoader-Impl.hpp" />
+    <ClInclude Include="Includes\Common\GLTFLoader.h" />
+    <ClInclude Include="Includes\Common\Logger.h" />
+    <ClInclude Include="Includes\Common\pch.h" />
+    <ClInclude Include="Includes\Common\VertexFormat.h" />
+    <ClInclude Include="Includes\Common\NonCopyable.h" />
+    <ClInclude Include="Includes\Renderer.h" />
+    <ClInclude Include="Includes\ClipmapRegion.h" />
+    <ClInclude Include="Includes\RenderPass\GBufferDebugPass.h" />
+    <ClInclude Include="Includes\RenderPass\GBufferPass.h" />
+    <ClInclude Include="Includes\RenderPass\RadianceInjectionPass.h" />
+    <ClInclude Include="Includes\RenderPass\RenderPassBase.h" />
+    <ClInclude Include="Includes\RenderPass\RenderPassManager.h" />
+    <ClInclude Include="Includes\RenderPass\VolumeVisualizerPass.h" />
+    <ClInclude Include="Includes\RenderPass\VoxelConeTracingPass.h" />
+    <ClInclude Include="Includes\RenderPass\Voxelizer.h" />
+    <ClInclude Include="Includes\SwapChain.h" />
+    <ClInclude Include="Includes\UIEngine\ImGuiUtil.h" />
+    <ClInclude Include="Includes\UIEngine\UIRenderer.h" />
+    <ClInclude Include="Includes\VolumeVisualizer.h" />
+    <ClInclude Include="Includes\VoxelEngine\OctreeBuilder.h" />
+    <ClInclude Include="Includes\VoxelEngine\OctreeVisualizer.h" />
+    <ClInclude Include="Includes\Common\Utils.h" />
+    <ClInclude Include="Includes\Common\Utils-Impl.hpp" />
+    <ClInclude Include="Includes\VoxelEngine\OctreeVoxelConeTracing.h" />
+    <ClInclude Include="Includes\VoxelEngine\SparseVoxelOctree.h" />
+    <ClInclude Include="Includes\VoxelEngine\Counter.h" />
+    <ClInclude Include="Includes\VoxelEngine\SparseVoxelizer.h" />
+    <ClCompile Include="Sources\Common\AssetLoader.cpp" />
+    <ClCompile Include="Sources\Common\pch.cpp" />
+    <ClInclude Include="Sources\Common\Logger.cpp" />
+    <ClCompile Include="Sources\Common\VertexFormat.cpp" />
+    <ClCompile Include="Sources\UIEngine\ImGuiUtil.cpp" />
+    <ClCompile Include="Sources\UIEngine\UIRenderer.cpp" />
+    <ClInclude Include="Includes\RenderPass\ShadowMapPass.h" />
+    <ClInclude Include="Sources\VoxelEngine\SparseVoxelOctree.cpp" />
+    <ClCompile Include="Sources\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Includes\RenderPass\VoxelizationPass.h" />
+    <None Include="Shaders\avc.geom" />
+    <None Include="Shaders\octreeNodeAlloc.comp" />
+    <None Include="Shaders\octreeNodeFlag.comp" />
+    <None Include="Shaders\octreeNodeIndirectCmd.comp" />
+    <None Include="Shaders\octreeNodeInit.comp" />
+    <None Include="Shaders\octreeNodeMipmapWrite.comp" />
+    <None Include="Shaders\octreeNodeModifyArg.comp" />
+    <None Include="Shaders\avc.frag" />
+    <None Include="Shaders\avc.vert" />
+    <None Include="Shaders\voxelizer.frag" />
+    <None Include="Shaders\voxelizer.geom" />
+    <None Include="Shaders\voxelizer.vert" />
+    <None Include="Shaders\voxel_cone_tracing.frag" />
+    <None Include="Shaders\voxel_cone_tracing.vert" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

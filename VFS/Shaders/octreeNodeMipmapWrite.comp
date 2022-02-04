@@ -1,0 +1,91 @@
+#version 450
+layout (local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+layout ( std430, set = 0, binding = 1 ) buffer OctreeStorageBuffer
+{ 
+	uvec2 data[]; 
+} uOctree;
+
+layout ( std430, set = 0, binding = 2 ) readonly buffer FragmentListStorageBuffer
+{ 
+	uvec2 data[]; 
+} uFragmentList;
+
+// layout (  r32ui, set = 0, binding = 5 ) uniform uimageBuffer uOctreeBrickPool; 
+
+layout ( push_constant ) uniform constants
+{
+	uint fragmentNum;
+	uint voxelResolution;
+	uint targetLevel;
+} uPushConstants;
+
+// Below schemes are referred from OpenGL Insight Chapter 22
+uvec4 convRGBA8ToVec4( uint val);
+uint  convVec4ToRGBA8( uvec4 val);
+
+void main()
+{
+    if (gl_GlobalInvocationID.x >= uPushConstants.fragmentNum)
+	{
+		return;
+	}
+	
+	uvec2 fragmentData = uFragmentList.data[gl_GlobalInvocationID.x];
+	uvec3 fragPos = uvec3(
+		fragmentData.x & 0xfffu, 
+		(fragmentData.x >> 12u) & 0xfffu,
+		((fragmentData.x >> 24u) & 0xffu) | ((fragmentData.y >> 20u) & 0xf00u)
+	) >> 1 ; // TODO(snowapril) : why scale half work?
+
+	uint resolution = uPushConstants.voxelResolution;
+	uint idx = 0, cur = 0; 
+	uvec3 cmp;
+	do {
+		resolution >>= 1;
+		cmp = uvec3(greaterThanEqual(fragPos, uvec3(resolution)));
+		idx = cur + (cmp.z | (cmp.x << 1) | (cmp.y << 2));  // TODO(snowapril) : why rotation work?
+		cur = uOctree.data[idx].x & 0x3fffffff; // Without MSB flag
+		fragPos -= cmp * resolution;
+	} while (cur != 0u && resolution > uPushConstants.targetLevel);
+
+	if (resolution == uPushConstants.targetLevel) // Leaf node
+	{
+		 //uint childIndex = uOctree.data[idx].x & 0x3fffffff;
+ 		 //vec4 childValueSum = uvec4(0);
+		 //
+		 //for (uint j = 0; j < 8; ++j)
+		 //{
+		 //	childValueSum += convRGBA8ToVec4(uOctree.data[childIndex + j].y) >> 3;
+		 //}
+		 //uOctree.data[idx].y = convVec4ToRGBA8(childValueSum);
+
+		uint childIndex = uOctree.data[idx].x & 0x3fffffff;
+ 		vec4 childValueSum = vec4(0);
+		for (uint j = 0; j < 8; ++j)
+		{
+			childValueSum += unpackUnorm4x8(uOctree.data[childIndex + j].y) / 8.0;
+		}
+		uOctree.data[idx].y = packUnorm4x8(childValueSum);
+	}
+}
+
+uvec4 convRGBA8ToVec4( uint val) 
+{	
+	return uvec4 (
+		( val  & 0x000000ff ), 
+		(( val & 0x0000ff00 ) >>  8u ),
+		(( val & 0x00ff0000 ) >> 16u ),
+		(( val & 0xff000000 ) >> 24u )
+	);
+}
+
+uint convVec4ToRGBA8( uvec4 val)
+{
+	return ( 
+		((val.w & 0x000000ff) << 24u) | 
+		((val.z & 0x000000ff) << 16u) | 
+		((val.y & 0x000000ff) <<  8u) | 
+		 (val.x & 0x000000ff)
+	);
+}

@@ -1,0 +1,35 @@
+#version 450
+layout (local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+layout ( std140, set = 0, binding = 0 ) buffer CounterStorageBuffer
+{ 
+	uint value; 
+} uCounter;
+
+layout ( std430, set = 0, binding = 1 ) buffer OctreeStorageBuffer
+{ 
+	uvec2 data[]; 
+} uOctree;
+
+layout ( std140, set = 0, binding = 3 ) readonly buffer AllocInfoStorageBuffer
+{ 
+	uint allocBegin; 
+	uint allocNum; 
+} uAllocInfo;
+
+void main()
+{
+    if (gl_GlobalInvocationID.x >= uAllocInfo.allocNum)
+	{
+		return;
+	}
+
+	uint idx = gl_GlobalInvocationID.x + uAllocInfo.allocBegin;
+	if ((uOctree.data[idx].x & 0x80000000u) > 0u)
+	{
+		uint counterValue = atomicAdd(uCounter.value, 1u);
+		uOctree.data[idx].x = ((counterValue + 1u) << 3u) | 0x80000000u; // 2x2x2 child nodes
+		uOctree.data[idx].y = 0;
+		// uOctree.data[idx].y = (counterValue + 1u) * 27u; 				 // 3x3x3 brick
+	}
+}

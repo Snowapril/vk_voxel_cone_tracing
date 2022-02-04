@@ -1,0 +1,27 @@
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout ( std140, set = 0, binding = 0 ) readonly buffer CounterStorageBuffer
+{ 
+	uint value; 
+} uCounter;
+
+layout ( std140, set = 0, binding = 3 ) buffer AllocInfoStorageBuffer
+{ 
+	uint allocBegin; 
+	uint allocNum; 
+} uAllocInfo;
+
+layout ( std140, set = 0, binding = 4 ) buffer IndirectStorageBuffer
+{ 
+	uint numGroupX; 
+	uint numGroupY; 
+	uint numGroupZ; 
+} uIndirectInfo;
+
+void main()
+{
+	uAllocInfo.allocBegin += uAllocInfo.allocNum;
+	uAllocInfo.allocNum = (uCounter.value << 3) + 8u - uAllocInfo.allocBegin;
+	uIndirectInfo.numGroupX = uAllocInfo.allocNum / 64 + ((uAllocInfo.allocNum & 0x3fu) > 0 ? 1 : 0);
+}

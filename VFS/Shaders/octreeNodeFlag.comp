@@ -1,0 +1,47 @@
+#version 450
+layout (local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+layout ( std430, set = 0, binding = 1 ) buffer OctreeStorageBuffer
+{ 
+	uvec2 data[]; 
+} uOctree;
+
+layout ( std430, set = 0, binding = 2 ) readonly buffer FragmentListStorageBuffer
+{ 
+	uvec2 data[]; 
+} uFragmentList;
+
+layout ( push_constant ) uniform constants
+{
+	uint fragmentNum;
+	uint voxelResolution;
+} uPushConstants;
+
+void main()
+{
+    if (gl_GlobalInvocationID.x >= uPushConstants.fragmentNum)
+	{
+		return;
+	}
+	
+	uvec2 fragmentData = uFragmentList.data[gl_GlobalInvocationID.x];
+	uvec3 fragPos = uvec3(
+		fragmentData.x & 0xfffu, 
+		(fragmentData.x >> 12u) & 0xfffu,
+		((fragmentData.x >> 24u) & 0xffu) | ((fragmentData.y >> 20u) & 0xf00u)
+	) >> 1 ; // TODO(snowapril) : why scale half work?
+
+	uint resolution = uPushConstants.voxelResolution;
+	uint idx = 0, cur = 0; 
+	uvec3 cmp;
+	do {
+		resolution >>= 1;
+		cmp = uvec3(greaterThanEqual(fragPos, uvec3(resolution)));
+		idx = cur + (cmp.z | (cmp.x << 1) | (cmp.y << 2));  // TODO(snowapril) : why rotation work?
+		cur = uOctree.data[idx].x & 0x3fffffff; // Without MSB flag
+		fragPos -= cmp * resolution;
+	} while (cur != 0u && resolution > 1u);
+
+	// TODO(snowapril) : |= 는 read와 write가 모두 포함되어있으니, 여러 thread가 같은 node에 접근을 시도하게 되면 병목 생길듯?
+	uOctree.data[idx].x |= 0x80000000; // Set MSB bit flagged
+}
