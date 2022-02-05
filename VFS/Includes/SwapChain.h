@@ -57,7 +57,14 @@ namespace vfs
 		VkSurfaceFormatKHR	pickSwapSurfaceFormat	(const std::vector<VkSurfaceFormatKHR>& formats);
 		VkPresentModeKHR	pickSwapPresentMode		(const std::vector<VkPresentModeKHR>& presentModes);
 		VkExtent2D			pickSwapExtent			(VkSurfaceCapabilitiesKHR capabilities);
-	
+
+		struct SwapChainSupportDetails
+		{
+			VkSurfaceCapabilitiesKHR		capabilities{};
+			std::vector<VkSurfaceFormatKHR> formats;
+			std::vector<VkPresentModeKHR>	presentModes;
+		};
+		SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice physicalDevice);
 	private:
 		std::vector<vfs::FramebufferPtr> _framebuffers;
 		std::vector<VkImage>			 _swapChainImages;
@@ -71,6 +78,7 @@ namespace vfs
 		QueuePtr						 _presentQueue			{  		nullptr		  };
 		WindowPtr						 _window				{  		nullptr		  };
 		std::unique_ptr<SwapChain>		 _oldSwapChain			{		nullptr		  };
+		VkSurfaceKHR					 _surface				{ VK_NULL_HANDLE };
 		VkSwapchainKHR					 _swapChainHandle		{	VK_NULL_HANDLE	  };
 		VkFormat						 _swapChainImageFormat	{ VK_FORMAT_UNDEFINED };
 		VkExtent2D						 _swapChainImageExtent	{ 0, 0 };

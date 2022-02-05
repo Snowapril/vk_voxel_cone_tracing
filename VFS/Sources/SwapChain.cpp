@@ -23,7 +23,8 @@ namespace vfs
 	
 	SwapChain::SwapChain(std::unique_ptr<SwapChain>&& oldSwapChain)
 	{
-		_oldSwapChain = std::move(oldSwapChain);
+		_oldSwapChain	= std::move(oldSwapChain);
+		_surface		= _oldSwapChain->_surface;
 		assert(initialize(_oldSwapChain->_graphicsQueue, _oldSwapChain->_presentQueue, _oldSwapChain->_window));
 	}
 	
@@ -46,6 +47,11 @@ namespace vfs
 		_swapChainImageViews.clear();
 		_swapChainImages.clear();
 		vkDestroySwapchainKHR(device, _swapChainHandle, nullptr);
+		if (_surface != VK_NULL_HANDLE)
+		{
+			vkDestroySurfaceKHR(_device->getVulkanInstance(), _surface, nullptr);
+			_surface = VK_NULL_HANDLE;
+		}
 		_window.reset();
 		_device.reset();
 	}
@@ -156,11 +162,17 @@ namespace vfs
 
 	bool SwapChain::initializeSwapChain(void)
 	{
-		vfs::Device::SwapChainSupportDetails detail	= _device->querySwapChainSupport();
-		VkSurfaceFormatKHR surfaceFormat		= pickSwapSurfaceFormat(detail.formats);
-		VkPresentModeKHR presentMode			= pickSwapPresentMode(detail.presentModes);
-		VkExtent2D extent						= pickSwapExtent(detail.capabilities);
-	
+		// Only create surface for first swapchain creation and reuse
+		if (_surface != VK_NULL_HANDLE)
+		{
+			_surface = _window->getWindowSurface(_device->getVulkanInstance());
+		}
+
+		SwapChain::SwapChainSupportDetails detail	= querySwapChainSupport(_device->getPhysicalDeviceHandle());
+		VkSurfaceFormatKHR surfaceFormat			= pickSwapSurfaceFormat(detail.formats);
+		VkPresentModeKHR presentMode				= pickSwapPresentMode(detail.presentModes);
+		VkExtent2D extent							= pickSwapExtent(detail.capabilities);
+
 		_swapChainImageFormat = surfaceFormat.format;
 		_swapChainImageExtent = extent;
 	
@@ -173,7 +185,7 @@ namespace vfs
 		VkSwapchainCreateInfoKHR swapChainInfo = {};
 		swapChainInfo.sType				= VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 		swapChainInfo.pNext				= nullptr;
-		swapChainInfo.surface			= _device->getSurfaceHandle();
+		swapChainInfo.surface			= _surface;
 		swapChainInfo.minImageCount		= minImageCount;
 		swapChainInfo.imageColorSpace	= surfaceFormat.colorSpace;
 		swapChainInfo.imageFormat		= surfaceFormat.format;
@@ -325,5 +337,31 @@ namespace vfs
 	
 			return extent;
 		}
+	}
+
+	SwapChain::SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice physicalDevice)
+	{
+		SwapChain::SwapChainSupportDetails detail;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, _surface, &detail.capabilities);
+
+		uint32_t surfaceFormatCount{ 0 };
+		vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, _surface, &surfaceFormatCount, nullptr);
+
+		if (surfaceFormatCount != 0)
+		{
+			detail.formats.resize(surfaceFormatCount);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, _surface, &surfaceFormatCount, detail.formats.data());
+		}
+
+		uint32_t presentModeCount{ 0 };
+		vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, _surface, &presentModeCount, nullptr);
+
+		if (presentModeCount != 0)
+		{
+			detail.presentModes.resize(presentModeCount);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, _surface, &presentModeCount, detail.presentModes.data());
+		}
+
+		return detail;
 	}
 };

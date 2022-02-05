@@ -14,21 +14,14 @@ namespace vfs
 	{
 	public:
 		explicit Device() = default;
-		explicit Device(std::shared_ptr<Window> window);
+		explicit Device(const char* appTitle);
 				~Device();
 
-		struct SwapChainSupportDetails
-		{
-			VkSurfaceCapabilitiesKHR		capabilities {};
-			std::vector<VkSurfaceFormatKHR> formats;
-			std::vector<VkPresentModeKHR>	presentModes;
-		};
 	public:
 		void					destroyDevice				();
-		bool					initialize					(std::shared_ptr<Window> window);
+		bool					initialize					(const char* appTitle);
 		bool					initializeLogicalDevice		(const std::vector<uint32_t>& queueFamilyIndices);
 		bool					initializeMemoryAllocator	(void);
-		SwapChainSupportDetails querySwapChainSupport		();
 		void					findQueueFamilyIndices		(uint32_t* graphicsFamily, 
 															 uint32_t* presentFamily,
 															 uint32_t* loaderFamily);
@@ -36,10 +29,6 @@ namespace vfs
 		inline VmaAllocator		getMemoryAllocator(void) const
 		{
 			return _memoryAllocator;
-		}
-		inline VkSurfaceKHR		getSurfaceHandle(void) const
-		{
-			return _surface;
 		}
 		inline VkInstance		getVulkanInstance(void) const
 		{
@@ -63,7 +52,7 @@ namespace vfs
 		}
 
 	private:	
-		bool initializeInstance			(void);
+		bool initializeInstance			(const char* appTitle);
 		bool pickPhysicalDevice			(void);
 		bool checkExtensionSupport		(void) const;
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device) const;
@@ -80,7 +69,6 @@ namespace vfs
 		VkDebugUtilsMessengerEXT	_debugMessenger				{ VK_NULL_HANDLE };
 		VkSurfaceKHR				_surface					{ VK_NULL_HANDLE };
 		VmaAllocator				_memoryAllocator			{	nullptr		 };
-		std::shared_ptr<Window>		_window						{	nullptr		 };
 		bool						_enableValidationLayer		{	false		 };
 	};
 }

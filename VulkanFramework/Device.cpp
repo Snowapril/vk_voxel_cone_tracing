@@ -15,10 +15,9 @@ constexpr const char* REQUIRED_LAYERS[]		= { "VK_LAYER_KHRONOS_validation"	};
 
 namespace vfs
 {
-	Device::Device(std::shared_ptr<Window> window)
+	Device::Device(const char* appTitle)
 	{
-		// Initialization call here
-		assert(initialize(window));
+		assert(initialize(appTitle));
 	}
 
 	Device::~Device()
@@ -48,25 +47,18 @@ namespace vfs
 
 		if (_instance != VK_NULL_HANDLE)
 		{
-			if (_surface != VK_NULL_HANDLE)
-			{
-				vkDestroySurfaceKHR(_instance, _surface, nullptr);
-				_instance = VK_NULL_HANDLE;
-			}
 			vkDestroyInstance(_instance, nullptr);
 			_instance = VK_NULL_HANDLE;
 		}
-		_window.reset();
 	}
 
-	bool Device::initialize(std::shared_ptr<Window> window)
+	bool Device::initialize(const char* appTitle)
 	{
 #ifdef NDEBUG
 		_enableValidationLayer = false;
 #else
 		_enableValidationLayer = true;
 #endif
-		_window = window;
 
 		if (_enableValidationLayer)
 		{
@@ -96,7 +88,7 @@ namespace vfs
 			}
 		}
 
-		if (!initializeInstance())
+		if (!initializeInstance(appTitle))
 		{
 			return false;
 		}
@@ -116,11 +108,6 @@ namespace vfs
 			std::clog << "[RenderEngine] Debug messenger created\n";
 		}
 
-		if (!_window->getWindowSurface(_instance, &_surface))
-		{
-			return false;
-		}
-
 		if (!pickPhysicalDevice())
 		{
 			return false;
@@ -129,12 +116,12 @@ namespace vfs
 		return true;
 	}
 
-	bool Device::initializeInstance()
+	bool Device::initializeInstance(const char* appTitle)
 	{
 		VkApplicationInfo appInfo = {};
 		appInfo.sType				= VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pNext				= nullptr;
-		appInfo.pApplicationName	= _window->getTitle();
+		appInfo.pApplicationName	= appTitle;
 		appInfo.applicationVersion	= VK_MAKE_VERSION(0, 0, 0);
 		appInfo.pEngineName			= "PAEngine";
 		appInfo.apiVersion			= VK_API_VERSION_1_2;
@@ -401,32 +388,6 @@ namespace vfs
 		// TODO(snowapril) : compare properties and required extensions here.
 
 		return true;
-	}
-
-	Device::SwapChainSupportDetails Device::querySwapChainSupport()
-	{
-		Device::SwapChainSupportDetails detail;
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(_physicalDevice, _surface, &detail.capabilities);
-
-		uint32_t surfaceFormatCount{ 0 };
-		vkGetPhysicalDeviceSurfaceFormatsKHR(_physicalDevice, _surface, &surfaceFormatCount, nullptr);
-
-		if (surfaceFormatCount != 0)
-		{
-			detail.formats.resize(surfaceFormatCount);
-			vkGetPhysicalDeviceSurfaceFormatsKHR(_physicalDevice, _surface, &surfaceFormatCount, detail.formats.data());
-		}
-
-		uint32_t presentModeCount{ 0 };
-		vkGetPhysicalDeviceSurfacePresentModesKHR(_physicalDevice, _surface, &presentModeCount, nullptr);
-
-		if (presentModeCount != 0)
-		{
-			detail.presentModes.resize(presentModeCount);
-			vkGetPhysicalDeviceSurfacePresentModesKHR(_physicalDevice, _surface, &presentModeCount, detail.presentModes.data());
-		}
-
-		return detail;
 	}
 
 	std::vector<const char*> Device::getRequiredExtensions() const
