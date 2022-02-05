@@ -3,6 +3,7 @@
 #if !defined(VULKAN_FRAMEWORK_PCH_H)
 #define VULKAN_FRAMEWORK_PCH_H
 
+#include <VulkanFramework/NonCopyable.h>
 #include <vector>
 #include <memory>
 
