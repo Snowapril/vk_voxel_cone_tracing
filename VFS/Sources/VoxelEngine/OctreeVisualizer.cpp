@@ -2,7 +2,7 @@
 
 #include <Common/pch.h>
 #include <Common/EngineConfig.h>
-#include <VulkanFramework/Camera.h>
+#include <Camera.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Buffer.h>
 #include <VulkanFramework/DescriptorPool.h>

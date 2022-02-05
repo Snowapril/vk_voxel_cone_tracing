@@ -15,7 +15,7 @@
 #include <VulkanFramework/GraphicsPipeline.h>
 #include <VulkanFramework/PipelineLayout.h>
 #include <VulkanFramework/PipelineConfig.h>
-#include <VulkanFramework/Camera.h>
+#include <Camera.h>
 #include <VulkanFramework/FrameLayout.h>
 
 namespace vfs

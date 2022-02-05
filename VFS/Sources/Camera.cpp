@@ -1,14 +1,14 @@
 // Author : Jihong Shin (snowapril)
 
-#include <VulkanFramework/pch.h>
-#include <GLFW/glfw3.h>
-#include <VulkanFramework/Camera.h>
+#include <Common/pch.h>
+#include <Camera.h>
 #include <VulkanFramework/Window.h>
 #include <VulkanFramework/Buffer.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/DescriptorPool.h>
 #include <VulkanFramework/DescriptorSet.h>
 #include <VulkanFramework/DescriptorSetLayout.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 namespace vfs

@@ -3,7 +3,7 @@
 #if !defined(RENDER_ENGINE_PCH_H)
 #define RENDER_ENGINE_PCH_H
 
-#include <Common/NonCopyable.h>
+#include <VulkanFramework/NonCopyable.h>
 #include <vector>
 #include <memory>
 

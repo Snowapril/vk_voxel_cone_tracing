@@ -6,7 +6,7 @@
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Window.h>
 #include <VulkanFramework/Queue.h>
-#include <VulkanFramework/Camera.h>
+#include <Camera.h>
 #include <VulkanFramework/RenderPass.h>
 #include <VulkanFramework/FrameLayout.h>
 #include <RenderPass/GBufferPass.h>
