@@ -15,17 +15,18 @@ namespace vfs
 {
 	SwapChain::SwapChain(vfs::QueuePtr graphicsQueue,
 						 vfs::QueuePtr presentQueue,
-						 vfs::WindowPtr window)
+						 vfs::WindowPtr window,
+						 VkSurfaceKHR surface)
 	{
 		_oldSwapChain = nullptr;
-		assert(initialize(graphicsQueue, presentQueue, window));
+		assert(initialize(graphicsQueue, presentQueue, window, surface));
 	}
 	
 	SwapChain::SwapChain(std::unique_ptr<SwapChain>&& oldSwapChain)
 	{
 		_oldSwapChain	= std::move(oldSwapChain);
-		_surface		= _oldSwapChain->_surface;
-		assert(initialize(_oldSwapChain->_graphicsQueue, _oldSwapChain->_presentQueue, _oldSwapChain->_window));
+		assert(initialize(_oldSwapChain->_graphicsQueue, _oldSwapChain->_presentQueue, 
+						  _oldSwapChain->_window, _oldSwapChain->_surface));
 	}
 	
 	SwapChain::~SwapChain()
@@ -58,12 +59,14 @@ namespace vfs
 	
 	bool SwapChain::initialize(vfs::QueuePtr graphicsQueue,
 							   vfs::QueuePtr presentQueue,
-							   vfs::WindowPtr window)
+							   vfs::WindowPtr window,
+							   VkSurfaceKHR surface)
 	{
 		_graphicsQueue	= graphicsQueue;
 		_presentQueue	= presentQueue;
 		_device			= _graphicsQueue->getDevicePtr();
 		_window			= window;
+		_surface		= surface;
 	
 		if (!initializeSwapChain())
 		{
@@ -162,12 +165,6 @@ namespace vfs
 
 	bool SwapChain::initializeSwapChain(void)
 	{
-		// Only create surface for first swapchain creation and reuse
-		if (_surface == VK_NULL_HANDLE)
-		{
-			_surface = _window->getWindowSurface(_device->getVulkanInstance());
-		}
-
 		SwapChain::SwapChainSupportDetails detail	= querySwapChainSupport(_device->getPhysicalDeviceHandle());
 		VkSurfaceFormatKHR surfaceFormat			= pickSwapSurfaceFormat(detail.formats);
 		VkPresentModeKHR presentMode				= pickSwapPresentMode(detail.presentModes);
@@ -193,10 +190,8 @@ namespace vfs
 		swapChainInfo.imageArrayLayers	= 1;
 		swapChainInfo.imageUsage		= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 	
-		uint32_t graphicsFamily{ 0 }, presentFamily{ 0 }, loaderFamily{ 0 };
-		_device->findQueueFamilyIndices(&graphicsFamily, &presentFamily, &loaderFamily);
-		const uint32_t queueFamilyIndices[] = { graphicsFamily, presentFamily };
-		if (graphicsFamily != presentFamily)
+		const uint32_t queueFamilyIndices[] = { _graphicsQueue->getFamilyIndex(), _presentQueue->getFamilyIndex()};
+		if (queueFamilyIndices[0] != queueFamilyIndices[1])
 		{
 			swapChainInfo.imageSharingMode		= VK_SHARING_MODE_CONCURRENT;
 			swapChainInfo.queueFamilyIndexCount = 2;

@@ -15,7 +15,8 @@ namespace vfs
 		explicit SwapChain() = default;
 		explicit SwapChain(vfs::QueuePtr graphicsQueue,
 						   vfs::QueuePtr presentQueue,
-						   vfs::WindowPtr window);
+						   vfs::WindowPtr window,
+						   VkSurfaceKHR surface);
 		explicit SwapChain(std::unique_ptr<SwapChain>&& oldSwapChain);
 				~SwapChain();
 	
@@ -23,7 +24,8 @@ namespace vfs
 		void				destroySwapChain	(void);
 		bool				initialize			(vfs::QueuePtr graphicsQueue,
 												 vfs::QueuePtr presentQueue,
-												 vfs::WindowPtr window);
+												 vfs::WindowPtr window,
+												 VkSurfaceKHR surface);
 		VkResult			submitCommandBuffer	(VkCommandBuffer* commandBuffer, uint32_t* imageIndex, 
 												 std::vector<VkSemaphore> waitSemaphores,
 												 std::vector<VkSemaphore> signalSemaphores);
