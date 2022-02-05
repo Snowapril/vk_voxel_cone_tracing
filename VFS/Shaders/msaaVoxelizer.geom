@@ -46,8 +46,7 @@ void main()
 	for (int i = 0; i < 3; ++i)
 	{	
 		gl_ViewportIndex 	= axis;
-		gl_Position 		= gl_in[i].gl_Position; // uViewProj[axis] * gl_in[i].gl_Position;
-		//gl_Position 		= vec4(project(gl_in[i].gl_Position.xyz, axis), 0.0, 1.0);
+		gl_Position 		= uViewProj[axis] * gl_in[i].gl_Position;
 		gs_out.texCoord 	= gs_in[i].texCoord;
 		gs_out.position 	= gl_in[i].gl_Position.xyz;
 		EmitVertex();
