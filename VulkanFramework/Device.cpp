@@ -287,6 +287,14 @@ namespace vfs
 		return true;
 	}
 
+	void Device::getQueueFamilyProperties(std::vector<VkQueueFamilyProperties>* properties)
+	{
+		uint32_t queueFamilyCount{ 0 };
+		vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, nullptr);
+		properties->resize(queueFamilyCount);
+		vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, properties->data());
+	}
+
 	bool Device::checkDeviceSuitable(VkPhysicalDevice device) const
 	{
 		// TODO(snowapril) : findQueueFamilyIndices(device) check completeness
@@ -306,68 +314,6 @@ namespace vfs
 
 		// TODO(snowapril) : check REQUIRED_EXTENSIONS are all in the deviceExtensions
 		return true;
-	}
-
-	void Device::findQueueFamilyIndices(uint32_t* graphicsFamily,
-										uint32_t* presentFamily,
-										uint32_t* loaderFamily)
-	{
-		uint32_t queueFamilyCount{ 0 };
-		vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, nullptr);
-		std::vector<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyCount);
-		vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, queueFamilyProperties.data());
-
-		// Find queue family which support both graphics & present
-		uint32_t i = 0;
-		bool graphicsBits { false }, presentBits { false }, loaderBits { false };
-		for (const VkQueueFamilyProperties& queueFamilyProperty : queueFamilyProperties)
-		{
-			if (queueFamilyProperty.queueCount > 0 && 
-				(queueFamilyProperty.queueFlags & VK_QUEUE_GRAPHICS_BIT))
-			{
-				*graphicsFamily = i;
-				graphicsBits = true;
-			}
-
-			VkBool32 presentSupport = VK_FALSE;
-			vkGetPhysicalDeviceSurfaceSupportKHR(_physicalDevice, i, _surface, &presentSupport);
-			if (queueFamilyProperty.queueCount > 0 && presentSupport == VK_TRUE)
-			{
-				*presentFamily = i;
-				presentBits = true;
-			}
-
-			if (graphicsBits && presentBits)
-			{
-				break;
-			}
-			else
-			{
-				++i;
-			}
-		}
-
-		i = 0;
-		for (const VkQueueFamilyProperties& queueFamilyProperty : queueFamilyProperties)
-		{
-			if (queueFamilyProperty.queueCount > 0 && 
-				(queueFamilyProperty.queueFlags & VK_QUEUE_TRANSFER_BIT) &&
-				(queueFamilyProperty.queueFlags & VK_QUEUE_GRAPHICS_BIT) &&
-				(queueFamilyProperty.queueFlags & VK_QUEUE_COMPUTE_BIT))
-			{
-				*loaderFamily = i;
-				loaderBits = true;
-			}
-
-			if (loaderBits && *loaderFamily != *graphicsFamily) // snowapril : prefer separate family for loader queue
-			{
-				break;
-			}
-			else
-			{
-				++i;
-			}
-		}
 	}
 
 	bool Device::checkExtensionSupport() const

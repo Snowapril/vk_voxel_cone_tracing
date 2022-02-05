@@ -22,9 +22,7 @@ namespace vfs
 		bool					initialize					(const char* appTitle);
 		bool					initializeLogicalDevice		(const std::vector<uint32_t>& queueFamilyIndices);
 		bool					initializeMemoryAllocator	(void);
-		void					findQueueFamilyIndices		(uint32_t* graphicsFamily, 
-															 uint32_t* presentFamily,
-															 uint32_t* loaderFamily);
+		void					getQueueFamilyProperties	(std::vector<VkQueueFamilyProperties>* properties);
 
 		inline VmaAllocator		getMemoryAllocator(void) const
 		{
