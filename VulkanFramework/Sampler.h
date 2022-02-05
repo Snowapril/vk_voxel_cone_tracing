@@ -1,9 +1,9 @@
 // Author : Jihong Shin (snowapril)
 
-#if !defined(RENDER_ENGINE_SAMPLER_H)
-#define RENDER_ENGINE_SAMPLER_H
+#if !defined(VULKAN_FRAMEWORK_SAMPLER_H)
+#define VULKAN_FRAMEWORK_SAMPLER_H
 
-#include <Common/pch.h>
+#include <VulkanFramework/pch.h>
 
 namespace vfs
 {

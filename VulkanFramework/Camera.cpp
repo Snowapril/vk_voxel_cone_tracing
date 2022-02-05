@@ -10,7 +10,6 @@
 #include <VulkanFramework/DescriptorSet.h>
 #include <VulkanFramework/DescriptorSetLayout.h>
 #include <iostream>
-#include <Common/Utils.h>
 
 namespace vfs
 {

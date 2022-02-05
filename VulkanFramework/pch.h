@@ -1,9 +1,8 @@
 // Author : Jihong Shin (snowapril)
 
-#if !defined(RENDER_ENGINE_PCH_H)
-#define RENDER_ENGINE_PCH_H
+#if !defined(VULKAN_FRAMEWORK_PCH_H)
+#define VULKAN_FRAMEWORK_PCH_H
 
-#include <Common/NonCopyable.h>
 #include <vector>
 #include <memory>
 

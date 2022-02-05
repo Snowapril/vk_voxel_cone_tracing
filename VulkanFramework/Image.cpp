@@ -1,7 +1,6 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <Common/AssetLoader.h>
 #include <VulkanFramework/Buffer.h>
 #include <VulkanFramework/Image.h>
 #include <VulkanFramework/CommandPool.h>
