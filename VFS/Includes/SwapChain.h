@@ -78,7 +78,7 @@ namespace vfs
 		QueuePtr						 _presentQueue			{  		nullptr		  };
 		WindowPtr						 _window				{  		nullptr		  };
 		std::unique_ptr<SwapChain>		 _oldSwapChain			{		nullptr		  };
-		VkSurfaceKHR					 _surface				{ VK_NULL_HANDLE };
+		VkSurfaceKHR					 _surface				{	VK_NULL_HANDLE	  };
 		VkSwapchainKHR					 _swapChainHandle		{	VK_NULL_HANDLE	  };
 		VkFormat						 _swapChainImageFormat	{ VK_FORMAT_UNDEFINED };
 		VkExtent2D						 _swapChainImageExtent	{ 0, 0 };

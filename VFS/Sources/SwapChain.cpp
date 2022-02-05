@@ -163,7 +163,7 @@ namespace vfs
 	bool SwapChain::initializeSwapChain(void)
 	{
 		// Only create surface for first swapchain creation and reuse
-		if (_surface != VK_NULL_HANDLE)
+		if (_surface == VK_NULL_HANDLE)
 		{
 			_surface = _window->getWindowSurface(_device->getVulkanInstance());
 		}
