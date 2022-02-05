@@ -3,8 +3,8 @@
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Queue.h>
-#include <VulkanFramework/CommandBuffer.h>
-#include <VulkanFramework/Fence.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
+#include <VulkanFramework/Sync/Fence.h>
 
 namespace vfs
 {

@@ -1,7 +1,7 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/DescriptorPool.h>
+#include <VulkanFramework/Descriptors/DescriptorPool.h>
 #include <VulkanFramework/Device.h>
 #include <cassert>
 

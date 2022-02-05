@@ -4,8 +4,8 @@
 #define VFS_SWAPCHAIN_H
 
 #include <Common/pch.h>
-#include <VulkanFramework/Fence.h>
-#include <VulkanFramework/Semaphore.h>
+#include <VulkanFramework/Sync/Fence.h>
+#include <VulkanFramework/Sync/Semaphore.h>
 
 namespace vfs
 {

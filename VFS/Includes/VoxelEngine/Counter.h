@@ -4,7 +4,7 @@
 #define VOXEL_COUNTER
 
 #include <Common/pch.h>
-#include <VulkanFramework/Buffer.h>
+#include <VulkanFramework/Buffers/Buffer.h>
 #include <memory>
 
 namespace vfs

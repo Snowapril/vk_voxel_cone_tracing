@@ -2,7 +2,7 @@
 
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/RenderPass.h>
+#include <VulkanFramework/RenderPass/RenderPass.h>
 
 namespace vfs
 {

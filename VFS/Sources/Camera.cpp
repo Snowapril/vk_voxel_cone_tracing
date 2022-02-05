@@ -3,11 +3,11 @@
 #include <Common/pch.h>
 #include <Camera.h>
 #include <VulkanFramework/Window.h>
-#include <VulkanFramework/Buffer.h>
+#include <VulkanFramework/Buffers/Buffer.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/DescriptorPool.h>
-#include <VulkanFramework/DescriptorSet.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
+#include <VulkanFramework/Descriptors/DescriptorPool.h>
+#include <VulkanFramework/Descriptors/DescriptorSet.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 

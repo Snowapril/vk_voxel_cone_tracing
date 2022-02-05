@@ -2,7 +2,7 @@
 
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/Fence.h>
+#include <VulkanFramework/Sync/Fence.h>
 
 namespace vfs
 {

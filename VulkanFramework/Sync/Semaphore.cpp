@@ -2,7 +2,7 @@
 
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/Semaphore.h>
+#include <VulkanFramework/Sync/Semaphore.h>
 
 namespace vfs
 {

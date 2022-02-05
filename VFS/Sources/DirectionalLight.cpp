@@ -3,10 +3,10 @@
 #include <Common/pch.h>
 #include <DirectionalLight.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/Image.h>
-#include <VulkanFramework/ImageView.h>
-#include <VulkanFramework/Sampler.h>
-#include <VulkanFramework/Buffer.h>
+#include <VulkanFramework/Images/Image.h>
+#include <VulkanFramework/Images/ImageView.h>
+#include <VulkanFramework/Images/Sampler.h>
+#include <VulkanFramework/Buffers/Buffer.h>
 #include <Shaders/light.glsl>
 
 namespace vfs

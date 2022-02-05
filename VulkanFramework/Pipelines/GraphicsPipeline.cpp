@@ -1,9 +1,9 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/GraphicsPipeline.h>
+#include <VulkanFramework/Pipelines/GraphicsPipeline.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/PipelineConfig.h>
+#include <VulkanFramework/Pipelines/PipelineConfig.h>
 #include <iostream>
 
 namespace vfs

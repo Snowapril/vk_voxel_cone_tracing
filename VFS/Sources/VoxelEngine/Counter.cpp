@@ -1,11 +1,11 @@
 // Author : Jihong Shin (snowapril)
 
 #include <Common/pch.h>
-#include <VulkanFramework/Buffer.h>
-#include <VulkanFramework/CommandPool.h>
+#include <VulkanFramework/Buffers/Buffer.h>
+#include <VulkanFramework/Commands/CommandPool.h>
 #include <VulkanFramework/Queue.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/Fence.h>
+#include <VulkanFramework/Sync/Fence.h>
 #include <VoxelEngine/Counter.h>
 #include <iostream>
 

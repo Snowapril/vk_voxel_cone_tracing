@@ -2,22 +2,22 @@
 
 #include <Common/pch.h>
 #include <RenderPass/ShadowMapPass.h>
-#include <VulkanFramework/CommandBuffer.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
-#include <VulkanFramework/DescriptorSet.h>
-#include <VulkanFramework/DescriptorPool.h>
-#include <VulkanFramework/Image.h>
-#include <VulkanFramework/ImageView.h>
-#include <VulkanFramework/Sampler.h>
-#include <VulkanFramework/Framebuffer.h>
-#include <VulkanFramework/RenderPass.h>
-#include <VulkanFramework/GraphicsPipeline.h>
-#include <VulkanFramework/PipelineLayout.h>
-#include <VulkanFramework/PipelineConfig.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
+#include <VulkanFramework/Descriptors/DescriptorSet.h>
+#include <VulkanFramework/Descriptors/DescriptorPool.h>
+#include <VulkanFramework/Images/Image.h>
+#include <VulkanFramework/Images/ImageView.h>
+#include <VulkanFramework/Images/Sampler.h>
+#include <VulkanFramework/RenderPass/Framebuffer.h>
+#include <VulkanFramework/RenderPass/RenderPass.h>
+#include <VulkanFramework/Pipelines/GraphicsPipeline.h>
+#include <VulkanFramework/Pipelines/PipelineLayout.h>
+#include <VulkanFramework/Pipelines/PipelineConfig.h>
 #include <Camera.h>
 #include <VulkanFramework/FrameLayout.h>
-#include <VulkanFramework/Buffer.h>
+#include <VulkanFramework/Buffers/Buffer.h>
 #include <RenderPass/RenderPassManager.h>
 #include <GLTFScene.h>
 

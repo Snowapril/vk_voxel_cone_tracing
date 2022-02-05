@@ -5,11 +5,11 @@
 #include <Renderer.h>
 #include <SwapChain.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/Image.h>
-#include <VulkanFramework/ImageView.h>
-#include <VulkanFramework/RenderPass.h>
-#include <VulkanFramework/Framebuffer.h>
-#include <VulkanFramework/CommandPool.h>
+#include <VulkanFramework/Images/Image.h>
+#include <VulkanFramework/Images/ImageView.h>
+#include <VulkanFramework/RenderPass/RenderPass.h>
+#include <VulkanFramework/RenderPass/Framebuffer.h>
+#include <VulkanFramework/Commands/CommandPool.h>
 #include <VulkanFramework/Utils.h>
 #include <VulkanFramework/Window.h>
 #include <iostream>

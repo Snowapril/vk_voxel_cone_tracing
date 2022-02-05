@@ -4,8 +4,8 @@
 #define VOXEL_ENGINE_OCTREE_VISUALIZER
 
 #include <Common/pch.h>
-#include <VulkanFramework/ComputePipeline.h>
-#include <VulkanFramework/GraphicsPipeline.h>
+#include <VulkanFramework/Pipelines/ComputePipeline.h>
+#include <VulkanFramework/Pipelines/GraphicsPipeline.h>
 
 namespace vfs
 {

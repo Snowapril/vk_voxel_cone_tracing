@@ -5,8 +5,8 @@
 #include <Common/Utils.h>
 #include <SwapChain.h>
 #include <VulkanFramework/Window.h>
-#include <VulkanFramework/Framebuffer.h>
-#include <VulkanFramework/Semaphore.h>
+#include <VulkanFramework/RenderPass/Framebuffer.h>
+#include <VulkanFramework/Sync/Semaphore.h>
 #include <VulkanFramework/Queue.h>
 #include <VulkanFramework/Device.h>
 #include <iostream>

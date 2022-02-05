@@ -4,7 +4,7 @@
 #define VULKAN_FRAMEWORK_QUEUE_H
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/CommandBuffer.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
 
 namespace vfs
 {

@@ -4,10 +4,10 @@
 #include <LoaderThread.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Queue.h>
-#include <VulkanFramework/CommandPool.h>
-#include <VulkanFramework/CommandBuffer.h>
+#include <VulkanFramework/Commands/CommandPool.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
 #include <VulkanFramework/QueryPool.h>
-#include <VulkanFramework/Fence.h>
+#include <VulkanFramework/Sync/Fence.h>
 #include <VoxelEngine/SparseVoxelizer.h>
 #include <VoxelEngine/OctreeBuilder.h>
 #include <GLTFScene.h>

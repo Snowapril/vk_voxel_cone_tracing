@@ -1,10 +1,10 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/Buffer.h>
-#include <VulkanFramework/Image.h>
-#include <VulkanFramework/CommandPool.h>
-#include <VulkanFramework/CommandBuffer.h>
+#include <VulkanFramework/Buffers/Buffer.h>
+#include <VulkanFramework/Images/Image.h>
+#include <VulkanFramework/Commands/CommandPool.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
 #include <iostream>
 
 namespace vfs

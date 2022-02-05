@@ -4,8 +4,8 @@
 #define VFS_VOLUME_VISUALIZER_H
 
 #include <Common/pch.h>
-#include <VulkanFramework/ComputePipeline.h>
-#include <VulkanFramework/GraphicsPipeline.h>
+#include <VulkanFramework/Pipelines/ComputePipeline.h>
+#include <VulkanFramework/Pipelines/GraphicsPipeline.h>
 
 namespace vfs
 {

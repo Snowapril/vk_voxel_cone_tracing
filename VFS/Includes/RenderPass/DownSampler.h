@@ -6,7 +6,7 @@
 #include <Common/pch.h>
 #include <Common/EngineConfig.h>
 #include <ClipmapRegion.h>
-#include <VulkanFramework/CommandBuffer.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
 
 // TODO(snowapril) : need to move upper directory (not in renderpass directory)
 namespace vfs

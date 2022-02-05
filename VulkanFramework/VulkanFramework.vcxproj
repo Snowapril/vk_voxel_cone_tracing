@@ -169,66 +169,68 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Buffer.h" />
-    <ClInclude Include="BufferView.h" />
-    <ClInclude Include="CommandBuffer.h" />
-    <ClInclude Include="CommandPool.h" />
-    <ClInclude Include="ComputePipeline.h" />
+    <ClInclude Include="Buffers\Buffer.h" />
+    <ClInclude Include="Buffers\BufferView.h" />
+    <ClInclude Include="Commands\CommandBuffer.h" />
+    <ClInclude Include="Commands\CommandPool.h" />
     <ClInclude Include="DebugUtils.h" />
-    <ClInclude Include="DescriptorPool.h" />
-    <ClInclude Include="DescriptorSet.h" />
-    <ClInclude Include="DescriptorSetLayout.h" />
+    <ClInclude Include="Descriptors\DescriptorPool.h" />
+    <ClInclude Include="Descriptors\DescriptorSet.h" />
+    <ClInclude Include="Descriptors\DescriptorSetLayout.h" />
     <ClInclude Include="Device.h" />
-    <ClInclude Include="Fence.h" />
-    <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="FrameLayout.h" />
-    <ClInclude Include="GraphicsPipeline.h" />
-    <ClInclude Include="Image.h" />
-    <ClInclude Include="ImageView.h" />
+    <ClInclude Include="Images\Image.h" />
+    <ClInclude Include="Images\ImageView.h" />
+    <ClInclude Include="Images\Sampler.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PipelineBase.h" />
-    <ClInclude Include="PipelineConfig.h" />
-    <ClInclude Include="PipelineLayout.h" />
+    <ClInclude Include="Pipelines\ComputePipeline.h" />
+    <ClInclude Include="Pipelines\GraphicsPipeline.h" />
+    <ClInclude Include="Pipelines\PipelineBase.h" />
+    <ClInclude Include="Pipelines\PipelineConfig.h" />
+    <ClInclude Include="Pipelines\PipelineLayout.h" />
     <ClInclude Include="QueryPool.h" />
     <ClInclude Include="Queue.h" />
-    <ClInclude Include="RenderPass.h" />
-    <ClInclude Include="Sampler.h" />
+    <ClInclude Include="RenderPass\Framebuffer.h" />
+    <ClInclude Include="RenderPass\RenderPass.h" />
     <ClInclude Include="Semaphore.h" />
+    <ClInclude Include="Sync\Fence.h" />
+    <ClInclude Include="Sync\Semaphore.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VulkanExtensions.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="BufferView.cpp" />
-    <ClCompile Include="CommandBuffer.cpp" />
-    <ClCompile Include="CommandPool.cpp" />
-    <ClCompile Include="ComputePipeline.cpp" />
+    <ClCompile Include="Buffers\Buffer.cpp" />
+    <ClCompile Include="Buffers\BufferView.cpp" />
+    <ClCompile Include="Commands\CommandBuffer.cpp" />
+    <ClCompile Include="Commands\CommandPool.cpp" />
     <ClCompile Include="DebugUtils.cpp" />
-    <ClCompile Include="DescriptorPool.cpp" />
-    <ClCompile Include="DescriptorSet.cpp" />
-    <ClCompile Include="DescriptorSetLayout.cpp" />
+    <ClCompile Include="Descriptors\DescriptorPool.cpp" />
+    <ClCompile Include="Descriptors\DescriptorSet.cpp" />
+    <ClCompile Include="Descriptors\DescriptorSetLayout.cpp" />
     <ClCompile Include="Device.cpp" />
-    <ClCompile Include="Fence.cpp" />
-    <ClCompile Include="Framebuffer.cpp" />
-    <ClCompile Include="GraphicsPipeline.cpp" />
-    <ClCompile Include="Image.cpp" />
-    <ClCompile Include="ImageView.cpp" />
+    <ClCompile Include="Images\Image.cpp" />
+    <ClCompile Include="Images\ImageView.cpp" />
+    <ClCompile Include="Images\Sampler.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PipelineBase.cpp" />
-    <ClCompile Include="PipelineConfig.cpp" />
-    <ClCompile Include="PipelineLayout.cpp" />
+    <ClCompile Include="Pipelines\ComputePipeline.cpp" />
+    <ClCompile Include="Pipelines\GraphicsPipeline.cpp" />
+    <ClCompile Include="Pipelines\PipelineBase.cpp" />
+    <ClCompile Include="Pipelines\PipelineConfig.cpp" />
+    <ClCompile Include="Pipelines\PipelineLayout.cpp" />
     <ClCompile Include="QueryPool.cpp" />
     <ClCompile Include="Queue.cpp" />
-    <ClCompile Include="RenderPass.cpp" />
-    <ClCompile Include="Sampler.cpp" />
+    <ClCompile Include="RenderPass\Framebuffer.cpp" />
+    <ClCompile Include="RenderPass\RenderPass.cpp" />
     <ClCompile Include="Semaphore.cpp" />
+    <ClCompile Include="Sync\Fence.cpp" />
+    <ClCompile Include="Sync\Semaphore.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VulkanExtensions.cpp" />
     <ClCompile Include="Window.cpp" />

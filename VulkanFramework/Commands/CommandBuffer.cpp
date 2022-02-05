@@ -1,18 +1,18 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/Buffer.h>
-#include <VulkanFramework/CommandBuffer.h>
-#include <VulkanFramework/CommandPool.h>
-#include <VulkanFramework/DescriptorSet.h>
-#include <VulkanFramework/RenderPass.h>
-#include <VulkanFramework/Image.h>
+#include <VulkanFramework/Buffers/Buffer.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
+#include <VulkanFramework/Commands/CommandPool.h>
+#include <VulkanFramework/Descriptors/DescriptorSet.h>
+#include <VulkanFramework/RenderPass/RenderPass.h>
+#include <VulkanFramework/Images/Image.h>
 #include <VulkanFramework/QueryPool.h>
-#include <VulkanFramework/Framebuffer.h>
+#include <VulkanFramework/RenderPass/Framebuffer.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/Fence.h>
+#include <VulkanFramework/Sync/Fence.h>
 #include <VulkanFramework/Queue.h>
-#include <VulkanFramework/PipelineBase.h>
+#include <VulkanFramework/Pipelines/PipelineBase.h>
 
 namespace vfs
 {

@@ -2,12 +2,12 @@
 
 #include <Common/pch.h>
 #include <Common/EngineConfig.h>
-#include <VulkanFramework/CommandPool.h>
+#include <VulkanFramework/Commands/CommandPool.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Window.h>
 #include <VulkanFramework/Queue.h>
 #include <Camera.h>
-#include <VulkanFramework/RenderPass.h>
+#include <VulkanFramework/RenderPass/RenderPass.h>
 #include <VulkanFramework/FrameLayout.h>
 #include <RenderPass/GBufferPass.h>
 #include <RenderPass/GBufferDebugPass.h>
@@ -182,7 +182,7 @@ namespace vfs
         bool test = true;
         while (!_window->getWindowShouldClose())
         {
-            _window->pollEvents();
+            glfwPollEvents();
 
             std::chrono::steady_clock::time_point nowTime = std::chrono::high_resolution_clock::now();
             const float elapsedTime = std::chrono::duration<float, std::chrono::seconds::period>(
@@ -312,7 +312,7 @@ namespace vfs
     bool Application::initializeVulkanDevice(void)
     {
         _window = std::make_shared<vfs::Window>(DEFAULT_APP_TITLE, 1280, 920);
-        _device = std::make_shared<vfs::Device>(_window);
+        _device = std::make_shared<vfs::Device>(DEFAULT_APP_TITLE);
 
         uint32_t graphicsFamily{ UINT32_MAX }, presentFamily{ UINT32_MAX }, loaderFamily{ UINT32_MAX };
         _device->findQueueFamilyIndices(&graphicsFamily, &presentFamily, &loaderFamily);

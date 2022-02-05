@@ -1,13 +1,13 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/Buffer.h>
-#include <VulkanFramework/BufferView.h>
-#include <VulkanFramework/DescriptorSet.h>
-#include <VulkanFramework/DescriptorPool.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
-#include <VulkanFramework/ImageView.h>
-#include <VulkanFramework/Sampler.h>
+#include <VulkanFramework/Buffers/Buffer.h>
+#include <VulkanFramework/Buffers/BufferView.h>
+#include <VulkanFramework/Descriptors/DescriptorSet.h>
+#include <VulkanFramework/Descriptors/DescriptorPool.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
+#include <VulkanFramework/Images/ImageView.h>
+#include <VulkanFramework/Images/Sampler.h>
 #include <VulkanFramework/Device.h>
 
 namespace vfs

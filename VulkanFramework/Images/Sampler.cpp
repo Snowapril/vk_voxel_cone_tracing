@@ -1,8 +1,8 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/Sampler.h>
-#include <VulkanFramework/Image.h>
+#include <VulkanFramework/Images/Sampler.h>
+#include <VulkanFramework/Images/Image.h>
 #include <VulkanFramework/Device.h>
 
 namespace vfs

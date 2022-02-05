@@ -2,17 +2,17 @@
 
 #include <Common/pch.h>
 #include <Common/EngineConfig.h>
-#include <VulkanFramework/CommandBuffer.h>
-#include <VulkanFramework/CommandPool.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
+#include <VulkanFramework/Commands/CommandPool.h>
 #include <VulkanFramework/Queue.h>
-#include <VulkanFramework/Buffer.h>
+#include <VulkanFramework/Buffers/Buffer.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/PipelineConfig.h>
-#include <VulkanFramework/Fence.h>
-#include <VulkanFramework/RenderPass.h>
-#include <VulkanFramework/PipelineLayout.h>
-#include <VulkanFramework/DescriptorPool.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
+#include <VulkanFramework/Pipelines/PipelineConfig.h>
+#include <VulkanFramework/Sync/Fence.h>
+#include <VulkanFramework/RenderPass/RenderPass.h>
+#include <VulkanFramework/Pipelines/PipelineLayout.h>
+#include <VulkanFramework/Descriptors/DescriptorPool.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
 #include <VoxelEngine/SparseVoxelizer.h>
 #include <VoxelEngine/Counter.h>
 #include <GLTFScene.h>

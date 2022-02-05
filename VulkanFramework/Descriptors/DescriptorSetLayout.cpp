@@ -2,7 +2,7 @@
 
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
 
 namespace vfs
 {

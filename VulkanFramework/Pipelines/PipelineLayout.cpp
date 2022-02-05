@@ -1,9 +1,9 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/PipelineLayout.h>
+#include <VulkanFramework/Pipelines/PipelineLayout.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
 
 namespace vfs
 {

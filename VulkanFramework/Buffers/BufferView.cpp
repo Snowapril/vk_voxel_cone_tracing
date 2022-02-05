@@ -1,8 +1,8 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/Buffer.h>
-#include <VulkanFramework/BufferView.h>
+#include <VulkanFramework/Buffers/Buffer.h>
+#include <VulkanFramework/Buffers/BufferView.h>
 #include <VulkanFramework/Device.h>
 
 namespace vfs

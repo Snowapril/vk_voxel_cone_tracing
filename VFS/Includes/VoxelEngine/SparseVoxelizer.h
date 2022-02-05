@@ -4,9 +4,9 @@
 #define VOXEL_ENGINE_SPARSE_VOXELIZER_H
 
 #include <memory>
-#include <VulkanFramework/Framebuffer.h>
-#include <VulkanFramework/DescriptorSet.h>
-#include <VulkanFramework/GraphicsPipeline.h>
+#include <VulkanFramework/RenderPass/Framebuffer.h>
+#include <VulkanFramework/Descriptors/DescriptorSet.h>
+#include <VulkanFramework/Pipelines/GraphicsPipeline.h>
 
 namespace vfs
 {

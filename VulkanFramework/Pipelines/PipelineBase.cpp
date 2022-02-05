@@ -2,8 +2,8 @@
 
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/PipelineBase.h>
-#include <VulkanFramework/PipelineConfig.h>
+#include <VulkanFramework/Pipelines/PipelineBase.h>
+#include <VulkanFramework/Pipelines/PipelineConfig.h>
 #include <fstream>
 #include <cassert>
 #include <iostream>

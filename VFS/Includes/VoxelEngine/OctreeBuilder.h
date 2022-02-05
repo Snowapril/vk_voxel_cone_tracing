@@ -4,7 +4,7 @@
 #define VOXEL_ENGINE_OCTREE_BUILDER
 
 #include <Common/pch.h>
-#include <VulkanFramework/ComputePipeline.h>
+#include <VulkanFramework/Pipelines/ComputePipeline.h>
 
 namespace vfs
 {

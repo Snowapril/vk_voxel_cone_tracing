@@ -1,7 +1,7 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/Framebuffer.h>
+#include <VulkanFramework/RenderPass/Framebuffer.h>
 #include <VulkanFramework/Device.h>
 #include <iostream>
 

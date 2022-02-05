@@ -1,7 +1,7 @@
 // Author : Jihong Shin (snowapril)
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/PipelineConfig.h>
+#include <VulkanFramework/Pipelines/PipelineConfig.h>
 
 namespace vfs
 {

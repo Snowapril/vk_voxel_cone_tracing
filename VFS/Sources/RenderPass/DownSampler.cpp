@@ -3,19 +3,19 @@
 #include <Common/pch.h>
 #include <RenderPass/DownSampler.h>
 #include <VulkanFramework/Device.h>
-#include <VulkanFramework/DescriptorPool.h>
-#include <VulkanFramework/DescriptorSet.h>
-#include <VulkanFramework/DescriptorSetLayout.h>
-#include <VulkanFramework/ComputePipeline.h>
-#include <VulkanFramework/PipelineLayout.h>
-#include <VulkanFramework/PipelineConfig.h>
-#include <VulkanFramework/CommandPool.h>
-#include <VulkanFramework/Image.h>
-#include <VulkanFramework/ImageView.h>
-#include <VulkanFramework/Sampler.h>
-#include <VulkanFramework/Fence.h>
+#include <VulkanFramework/Descriptors/DescriptorPool.h>
+#include <VulkanFramework/Descriptors/DescriptorSet.h>
+#include <VulkanFramework/Descriptors/DescriptorSetLayout.h>
+#include <VulkanFramework/Pipelines/ComputePipeline.h>
+#include <VulkanFramework/Pipelines/PipelineLayout.h>
+#include <VulkanFramework/Pipelines/PipelineConfig.h>
+#include <VulkanFramework/Commands/CommandPool.h>
+#include <VulkanFramework/Images/Image.h>
+#include <VulkanFramework/Images/ImageView.h>
+#include <VulkanFramework/Images/Sampler.h>
+#include <VulkanFramework/Sync/Fence.h>
 #include <VulkanFramework/Queue.h>
-#include <VulkanFramework/Buffer.h>
+#include <VulkanFramework/Buffers/Buffer.h>
 
 namespace vfs
 {

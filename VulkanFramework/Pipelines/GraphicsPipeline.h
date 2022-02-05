@@ -4,7 +4,7 @@
 #define VULKAN_FRAMEWORK_GRAPHICS_PIPELINE_H
 
 #include <VulkanFramework/pch.h>
-#include <VulkanFramework/PipelineBase.h>
+#include <VulkanFramework/Pipelines/PipelineBase.h>
 
 namespace vfs
 {
