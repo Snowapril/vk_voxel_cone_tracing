@@ -2,7 +2,8 @@
 Voxel based global illumination renderer.
 
 Demo scene (WIP)
-[Sponza scene](Media/demo_sponza.png)
+
+![Sponza scene](Media/demo_sponza.png)
 
 ## Quick Start
 CMake support will be added later
