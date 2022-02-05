@@ -18,7 +18,11 @@ namespace vfs
 
 	void Semaphore::destroySemaphore(void)
 	{
-		vkDestroySemaphore(_device->getDeviceHandle(), _semaphore, nullptr);
+		if (_semaphore != VK_NULL_HANDLE)
+		{
+			vkDestroySemaphore(_device->getDeviceHandle(), _semaphore, nullptr);
+			_semaphore = VK_NULL_HANDLE;
+		}
 	}
 
 	bool Semaphore::initialize(DevicePtr device)

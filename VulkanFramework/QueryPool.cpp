@@ -19,8 +19,11 @@ namespace vfs
 
 	void QueryPool::destroyQueryPool(void)
 	{
-		vkDestroyQueryPool(_device->getDeviceHandle(), _queryPool, nullptr);
-		_queryPool = VK_NULL_HANDLE;
+		if (_queryPool != VK_NULL_HANDLE)
+		{
+			vkDestroyQueryPool(_device->getDeviceHandle(), _queryPool, nullptr);
+			_queryPool = VK_NULL_HANDLE;
+		}
 		_numQuery = 0;
 		_device.reset();
 	}

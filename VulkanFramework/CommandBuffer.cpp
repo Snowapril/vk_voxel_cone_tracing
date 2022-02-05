@@ -22,7 +22,6 @@ namespace vfs
 		// Do nothing
 	}
 
-
 	void CommandBuffer::beginRecord(VkCommandBufferUsageFlags usage)
 	{
 		VkCommandBufferBeginInfo cmdBufferBeginInfo = {};
@@ -34,20 +33,19 @@ namespace vfs
 		vkBeginCommandBuffer(_cmdBuffer, &cmdBufferBeginInfo);
 	}
 
-
 	void CommandBuffer::beginRenderPass(const RenderPassPtr& renderPass,
 										const FramebufferPtr& framebuffer,
 										const std::vector<VkClearValue>& clearValues)
 	{
 		VkRenderPassBeginInfo renderPassBeginInfo = {};
-		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassBeginInfo.pNext = nullptr;
-		renderPassBeginInfo.renderPass = renderPass->getHandle();
-		renderPassBeginInfo.renderArea.offset = { 0, 0 };
-		renderPassBeginInfo.renderArea.extent = framebuffer->getExtent();
-		renderPassBeginInfo.framebuffer = framebuffer->getFramebufferHandle();
-		renderPassBeginInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-		renderPassBeginInfo.pClearValues = clearValues.data();
+		renderPassBeginInfo.sType				= VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassBeginInfo.pNext				= nullptr;
+		renderPassBeginInfo.renderPass			= renderPass->getHandle();
+		renderPassBeginInfo.renderArea.offset	= { 0, 0 };
+		renderPassBeginInfo.renderArea.extent	= framebuffer->getExtent();
+		renderPassBeginInfo.framebuffer			= framebuffer->getFramebufferHandle();
+		renderPassBeginInfo.clearValueCount		= static_cast<uint32_t>(clearValues.size());
+		renderPassBeginInfo.pClearValues		= clearValues.data();
 
 		vkCmdBeginRenderPass(_cmdBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 	}

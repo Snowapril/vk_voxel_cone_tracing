@@ -25,7 +25,12 @@ namespace vfs
 
 	void ImageView::destroyImageView(void)
 	{
-		vkDestroyImageView(_device->getDeviceHandle(), _imageViewHandle, nullptr);
+		if (_imageViewHandle != VK_NULL_HANDLE)
+		{
+			vkDestroyImageView(_device->getDeviceHandle(), _imageViewHandle, nullptr);
+			_imageViewHandle = VK_NULL_HANDLE;
+		}
+		_device.reset();
 	}
 
 	// TODO(snowapril) : refactoring two initialize methods

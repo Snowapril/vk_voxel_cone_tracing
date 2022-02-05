@@ -20,8 +20,12 @@ namespace vfs
 	{
 		for (VkFence& fence : _fences)
 		{
-			vkDestroyFence(_device->getDeviceHandle(), fence, nullptr);
+			if (fence != VK_NULL_HANDLE)
+			{
+				vkDestroyFence(_device->getDeviceHandle(), fence, nullptr);
+			}
 		}
+		_fences.clear();
 		_device.reset();
 	}
 

@@ -37,7 +37,13 @@ namespace vfs
 
 	void CommandPool::destroyCommandPool(void)
 	{
-		vkDestroyCommandPool(_device->getDeviceHandle(), _poolHandle, nullptr);
+		if (_poolHandle != VK_NULL_HANDLE)
+		{
+			vkDestroyCommandPool(_device->getDeviceHandle(), _poolHandle, nullptr);
+			_poolHandle = VK_NULL_HANDLE;
+		}
+		_queue.reset();
+		_device.reset();
 	}
 
 	VkCommandBuffer CommandPool::allocateCommandBuffer(void)

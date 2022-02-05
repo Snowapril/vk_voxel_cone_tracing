@@ -22,7 +22,11 @@ namespace vfs
 
 	void DescriptorPool::destroyDescriptorPool(void)
 	{
-		vkDestroyDescriptorPool(_device->getDeviceHandle(), _descriptorPool, nullptr);
+		if (_descriptorPool != VK_NULL_HANDLE)
+		{
+			vkDestroyDescriptorPool(_device->getDeviceHandle(), _descriptorPool, nullptr);
+			_descriptorPool = VK_NULL_HANDLE;
+		}
 		_device.reset();
 	}
 

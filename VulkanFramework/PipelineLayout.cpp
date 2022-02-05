@@ -47,6 +47,7 @@ namespace vfs
 		if (_layoutHandle != VK_NULL_HANDLE)
 		{
 			vkDestroyPipelineLayout(_device->getDeviceHandle(), _layoutHandle, nullptr);
+			_layoutHandle = VK_NULL_HANDLE;
 		}
 	}
 };

@@ -85,7 +85,6 @@ namespace vfs
 		config->depthStencilInfo.front					= {};
 		config->depthStencilInfo.back					= {};
 
-		
 		config->dynamicStateInfo.sType				= VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 		config->dynamicStateInfo.pNext				= nullptr;
 		config->dynamicStateInfo.dynamicStateCount	= static_cast<uint32_t>(config->dynamicStates.size());

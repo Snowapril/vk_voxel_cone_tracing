@@ -15,7 +15,13 @@ namespace vfs
 	}
 	Queue::~Queue()
 	{
-		// Do nothing
+		destroyQueue();
+	}
+
+	void Queue::destroyQueue(void)
+	{
+		_device.reset();
+		_familyIndex = 0;
 	}
 
 	bool Queue::initialize(DevicePtr device,

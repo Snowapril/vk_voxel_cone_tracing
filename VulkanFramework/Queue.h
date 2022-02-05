@@ -18,6 +18,7 @@ namespace vfs
 
 	public:
 		bool			initialize					(DevicePtr device, uint32_t familyIndex);
+		void			destroyQueue				(void);
 		void			submitCmdBuffer				(const std::vector<CommandBuffer>& cmdBuffers, 
 													 const Fence* fence);
 		void			submitCmdBufferSynchronized	(const std::vector<CommandBuffer>& cmdBuffers,

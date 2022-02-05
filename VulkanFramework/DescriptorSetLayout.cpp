@@ -18,7 +18,12 @@ namespace vfs
 
 	void DescriptorSetLayout::destroyDescriptorSetLayout(void)
 	{
-		vkDestroyDescriptorSetLayout(_device->getDeviceHandle(), _descSetLayout, nullptr);
+		if (_descSetLayout != VK_NULL_HANDLE)
+		{
+			vkDestroyDescriptorSetLayout(_device->getDeviceHandle(), _descSetLayout, nullptr);
+			_descSetLayout = VK_NULL_HANDLE;
+		}
+		_descBindingInfos.clear();
 		_device.reset();
 	}
 

@@ -24,7 +24,10 @@ namespace vfs
 	
 	void Window::destroyWindow(void)
 	{
-		glfwDestroyWindow(_window);
+		if (_window != nullptr)
+		{
+			glfwDestroyWindow(_window);
+		}
 		glfwTerminate();
 	}
 

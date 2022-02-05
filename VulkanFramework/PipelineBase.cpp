@@ -25,11 +25,20 @@ namespace vfs
 		const VkDevice device = _device->getDeviceHandle();
 		for (VkPipelineShaderStageCreateInfo& shaderStage : _shaderStages)
 		{
-			vkDestroyShaderModule(device, shaderStage.module, nullptr);
+			if (shaderStage.module != VK_NULL_HANDLE)
+			{
+				vkDestroyShaderModule(device, shaderStage.module, nullptr);
+			}
 		}
 		_shaderStages.clear();
-		vkDestroyPipeline(device, _pipeline, nullptr);
-		_pipeline		= VK_NULL_HANDLE;
+
+		if (_pipeline != VK_NULL_HANDLE)
+		{
+			vkDestroyPipeline(device, _pipeline, nullptr);
+			_pipeline = VK_NULL_HANDLE;
+		}
+
+		_device.reset();
 	}
 
 	bool PipelineBase::initialize(std::shared_ptr<Device> device)

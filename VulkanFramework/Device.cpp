@@ -28,14 +28,35 @@ namespace vfs
 
 	void Device::destroyDevice()
 	{
-		vmaDestroyAllocator(_memoryAllocator);
-		vkDestroyDevice(_device, nullptr);
-		if (_enableValidationLayer)
+		if (_memoryAllocator != nullptr)
+		{
+			vmaDestroyAllocator(_memoryAllocator);
+			_memoryAllocator = nullptr;
+		}
+
+		if (_device != VK_NULL_HANDLE)
+		{
+			vkDestroyDevice(_device, nullptr);
+			_device = VK_NULL_HANDLE;
+		}
+
+		if (_enableValidationLayer && _debugMessenger != VK_NULL_HANDLE)
 		{
 			vkDestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
+			_debugMessenger = VK_NULL_HANDLE;
 		}
-		vkDestroySurfaceKHR(_instance, _surface, nullptr);
-		vkDestroyInstance(_instance, nullptr);
+
+		if (_instance != VK_NULL_HANDLE)
+		{
+			if (_surface != VK_NULL_HANDLE)
+			{
+				vkDestroySurfaceKHR(_instance, _surface, nullptr);
+				_instance = VK_NULL_HANDLE;
+			}
+			vkDestroyInstance(_instance, nullptr);
+			_instance = VK_NULL_HANDLE;
+		}
+		_window.reset();
 	}
 
 	bool Device::initialize(std::shared_ptr<Window> window)

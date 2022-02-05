@@ -22,7 +22,12 @@ namespace vfs
 
 	void Framebuffer::destroyFramebuffer(void)
 	{
-		vkDestroyFramebuffer(_device->getDeviceHandle(), _framebuffer, nullptr);
+		if (_framebuffer != VK_NULL_HANDLE)
+		{
+			vkDestroyFramebuffer(_device->getDeviceHandle(), _framebuffer, nullptr);
+			_framebuffer = VK_NULL_HANDLE;
+		}
+		_device.reset();
 	}
 
 	bool Framebuffer::initialize(std::shared_ptr<Device> device,

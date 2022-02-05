@@ -17,7 +17,13 @@ namespace vfs
 
 	void Buffer::destroyBuffer(void)
 	{
-		vmaDestroyBuffer(_allocator, _buffer, _bufferAllocation);
+		if (_allocator != nullptr && _buffer != VK_NULL_HANDLE && _bufferAllocation != nullptr)
+		{
+			vmaDestroyBuffer(_allocator, _buffer, _bufferAllocation);
+			_allocator			= nullptr;
+			_buffer				= VK_NULL_HANDLE;
+			_bufferAllocation	= nullptr;
+		}
 	}
 
 	bool Buffer::initialize(VmaAllocator allocator, uint64_t bufferSize, VkBufferUsageFlags bufferUsage, VmaMemoryUsage memoryUsage)

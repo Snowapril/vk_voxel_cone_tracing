@@ -19,7 +19,11 @@ namespace vfs
 
 	void Sampler::destroySamplerHandler(void)
 	{
-		vkDestroySampler(_device->getDeviceHandle(), _samplerHandle, nullptr);
+		if (_samplerHandle != VK_NULL_HANDLE)
+		{
+			vkDestroySampler(_device->getDeviceHandle(), _samplerHandle, nullptr);
+			_samplerHandle = VK_NULL_HANDLE;
+		}
 	}
 
 	bool Sampler::initialize(DevicePtr device, VkSamplerAddressMode sampleMode, VkFilter filter, float maxLod)

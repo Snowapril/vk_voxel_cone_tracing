@@ -30,7 +30,9 @@ namespace vfs
 
 	void DescriptorSet::destroyDescriptorSet(void)
 	{
-		// Do nothing
+		_descriptorSetLayout.reset();
+		_descriptorPool.reset();
+		_device.reset();
 	}
 
 	bool DescriptorSet::initialize(DevicePtr device,

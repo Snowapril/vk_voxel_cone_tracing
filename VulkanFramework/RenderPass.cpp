@@ -77,6 +77,11 @@ namespace vfs
 
 	void RenderPass::destroyRenderPass(void)
 	{
-		vkDestroyRenderPass(_device->getDeviceHandle(), _renderPassHandle, nullptr);
+		if (_renderPassHandle != VK_NULL_HANDLE)
+		{
+			vkDestroyRenderPass(_device->getDeviceHandle(), _renderPassHandle, nullptr);
+			_renderPassHandle = VK_NULL_HANDLE;
+		}
+		_device.reset();
 	}
 }

@@ -22,6 +22,7 @@ namespace vfs
 		if (_bufferViewHandle != VK_NULL_HANDLE)
 		{
 			vkDestroyBufferView(_device->getDeviceHandle(), _bufferViewHandle, nullptr);
+			_bufferViewHandle = VK_NULL_HANDLE;
 		}
 		_device.reset();
 		_buffer.reset();

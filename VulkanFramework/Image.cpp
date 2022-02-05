@@ -21,7 +21,13 @@ namespace vfs
 
 	void Image::destroyImage(void)
 	{
-		vmaDestroyImage(_allocator, _imageHandle, _imageAllocation);
+		if (_allocator != nullptr && _imageHandle != VK_NULL_HANDLE && _imageAllocation != nullptr)
+		{
+			vmaDestroyImage(_allocator, _imageHandle, _imageAllocation);
+			_allocator		 = nullptr;
+			_imageHandle	 = VK_NULL_HANDLE;
+			_imageAllocation = nullptr;
+		}
 	}
 
 	bool Image::initialize(VmaAllocator allocator, VmaMemoryUsage memoryUsage, const VkImageCreateInfo& imageInfo)
