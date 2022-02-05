@@ -88,7 +88,7 @@ namespace vfs
 		}
 	}
 
-	bool PipelineBase::ReadSpirvShaderFile(const char* filePath, OUT std::vector<char>* retData)
+	bool PipelineBase::ReadSpirvShaderFile(const char* filePath, std::vector<char>* retData)
 	{
 		std::ifstream binaryFile(filePath, std::ios::ate | std::ios::binary);
 		

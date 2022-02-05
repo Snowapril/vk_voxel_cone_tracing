@@ -5,7 +5,7 @@
 
 namespace vfs
 {
-	void PipelineConfig::GetDefaultConfig(OUT PipelineConfig* config)
+	void PipelineConfig::GetDefaultConfig(PipelineConfig* config)
 	{
 		config->vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 		config->vertexInputInfo.pNext = nullptr;

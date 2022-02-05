@@ -39,7 +39,7 @@ namespace vfs
 										 const std::vector<VkPipelineShaderStageCreateInfo>& shaderStageInfos) = 0;
 		
 		static VkShaderModule	CreateShaderModule	(VkDevice device, const std::vector<char>& shaderData);
-		static bool				ReadSpirvShaderFile	(const char* filePath, OUT std::vector<char>* data);
+		static bool				ReadSpirvShaderFile	(const char* filePath, std::vector<char>* data);
 
 	protected:
 		VkPipeline				_pipeline	{ VK_NULL_HANDLE };

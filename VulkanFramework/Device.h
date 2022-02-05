@@ -29,9 +29,9 @@ namespace vfs
 		bool					initializeLogicalDevice		(const std::vector<uint32_t>& queueFamilyIndices);
 		bool					initializeMemoryAllocator	(void);
 		SwapChainSupportDetails querySwapChainSupport		();
-		void					findQueueFamilyIndices		(OUT uint32_t* graphicsFamily, 
-															 OUT uint32_t* presentFamily,
-															 OUT uint32_t* loaderFamily);
+		void					findQueueFamilyIndices		(uint32_t* graphicsFamily, 
+															 uint32_t* presentFamily,
+															 uint32_t* loaderFamily);
 
 		inline VmaAllocator		getMemoryAllocator(void) const
 		{
@@ -68,7 +68,7 @@ namespace vfs
 		bool checkExtensionSupport		(void) const;
 		bool checkDeviceExtensionSupport(VkPhysicalDevice device) const;
 		bool checkDeviceSuitable		(VkPhysicalDevice device) const;
-		void queryDebugUtilsCreateInfo	(OUT VkDebugUtilsMessengerCreateInfoEXT* desc) const;
+		void queryDebugUtilsCreateInfo	(VkDebugUtilsMessengerCreateInfoEXT* desc) const;
 		std::vector<const char*> getRequiredExtensions(void) const;
 
 	private:

@@ -47,7 +47,7 @@ namespace vfs
 		return true;
 	}
 
-	bool QueryPool::readQueryResults(OUT std::vector<uint64_t>* results)
+	bool QueryPool::readQueryResults(std::vector<uint64_t>* results)
 	{
 		results->resize(_numQuery);
 		VkResult result = vkGetQueryPoolResults(_device->getDeviceHandle(), 

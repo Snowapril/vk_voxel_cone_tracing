@@ -7,9 +7,6 @@
 #include <vector>
 #include <memory>
 
-#define NOMINMAX
-#include <windows.h>
-
 #pragma warning (push)
 #pragma warning (disable :  4191)
 #pragma warning (disable :  4296)

@@ -186,11 +186,11 @@
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageView.h" />
+    <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PipelineBase.h" />
     <ClInclude Include="PipelineConfig.h" />
     <ClInclude Include="PipelineLayout.h" />
-    <ClInclude Include="Predeclarations.h" />
     <ClInclude Include="QueryPool.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="RenderPass.h" />

@@ -24,7 +24,7 @@ namespace vfs
 	public:
 		void destroyWindow		 (void);
 		bool initialize			 (const char* title, int width, int height);
-		bool getWindowSurface	 (VkInstance instance, OUT VkSurfaceKHR* surface);
+		bool getWindowSurface	 (VkInstance instance, VkSurfaceKHR* surface);
 		void processKeyInput	 (void);
 		void processCursorPos	 (double xpos, double ypos);
 		void processWindowResize (int width, int height);

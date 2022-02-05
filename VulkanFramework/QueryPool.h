@@ -22,7 +22,7 @@ namespace vfs
 	public:
 		void destroyQueryPool	(void);
 		bool initialize			(DevicePtr device, uint32_t numQuery);
-		bool readQueryResults	(OUT std::vector<uint64_t>* results);
+		bool readQueryResults	(std::vector<uint64_t>* results);
 		void writeTimeStamp(VkCommandBuffer cmdBuffer, VkPipelineStageFlagBits stageFlag, uint32_t queryIndex);
 		void resetQueryPool(VkCommandBuffer cmdBuffer);
 

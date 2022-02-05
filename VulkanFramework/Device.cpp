@@ -155,7 +155,7 @@ namespace vfs
 		return true;
 	}
 
-	void Device::queryDebugUtilsCreateInfo(OUT VkDebugUtilsMessengerCreateInfoEXT* desc) const
+	void Device::queryDebugUtilsCreateInfo(VkDebugUtilsMessengerCreateInfoEXT* desc) const
 	{
 		desc->sType				= VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
 		desc->pNext				= nullptr;
@@ -300,9 +300,9 @@ namespace vfs
 		return true;
 	}
 
-	void Device::findQueueFamilyIndices(OUT uint32_t* graphicsFamily,
-										OUT uint32_t* presentFamily,
-										OUT uint32_t* loaderFamily)
+	void Device::findQueueFamilyIndices(uint32_t* graphicsFamily,
+										uint32_t* presentFamily,
+										uint32_t* loaderFamily)
 	{
 		uint32_t queueFamilyCount{ 0 };
 		vkGetPhysicalDeviceQueueFamilyProperties(_physicalDevice, &queueFamilyCount, nullptr);

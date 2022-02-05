@@ -10,7 +10,7 @@ namespace vfs
 	struct PipelineConfig
 	{	
 	public:
-		static	void GetDefaultConfig	(OUT PipelineConfig* config);
+		static	void GetDefaultConfig	(PipelineConfig* config);
 				bool isValid			(void) const;
 	public:
 		VkPipelineVertexInputStateCreateInfo			 vertexInputInfo		{};
