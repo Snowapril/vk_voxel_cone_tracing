@@ -48,7 +48,6 @@ namespace vfs
 {
 	class Buffer;
 	class BufferView;
-	class Camera;
 	class CommandPool;
 	class DescriptorPool;
 	class DescriptorSet;
@@ -74,7 +73,6 @@ namespace vfs
 
 	using BufferPtr				 = std::shared_ptr<Buffer>;
 	using BufferViewPtr			 = std::shared_ptr<BufferView>;
-	using CameraPtr				 = std::shared_ptr<Camera>;
 	using CommandPoolPtr		 = std::shared_ptr<CommandPool>;
 	using DescriptorPoolPtr		 = std::shared_ptr<DescriptorPool>;
 	using DescriptorSetPtr		 = std::shared_ptr<DescriptorSet>;
