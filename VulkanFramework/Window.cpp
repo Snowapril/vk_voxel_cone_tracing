@@ -62,9 +62,11 @@ namespace vfs
 		return true;
 	}
 
-	bool Window::getWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+	VkSurfaceKHR Window::getWindowSurface(VkInstance instance)
 	{
-		return glfwCreateWindowSurface(instance, _window, nullptr, surface) == VK_SUCCESS;
+		VkSurfaceKHR surface;
+		glfwCreateWindowSurface(instance, _window, nullptr, &surface);
+		return surface;
 	}
 
 	void Window::processKeyInput(void)

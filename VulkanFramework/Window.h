@@ -22,21 +22,17 @@ namespace vfs
 				~Window();
 
 	public:
-		void destroyWindow		 (void);
-		bool initialize			 (const char* title, int width, int height);
-		bool getWindowSurface	 (VkInstance instance, VkSurfaceKHR* surface);
-		void processKeyInput	 (void);
-		void processCursorPos	 (double xpos, double ypos);
-		void processWindowResize (int width, int height);
+		void		 destroyWindow		 (void);
+		bool		 initialize			 (const char* title, int width, int height);
+		void		 processKeyInput	 (void);
+		void		 processCursorPos	 (double xpos, double ypos);
+		void		 processWindowResize (int width, int height);
+		VkSurfaceKHR getWindowSurface	 (VkInstance instance);
 
 		void operator+=(const KeyCallback&			callback);
 		void operator+=(const CursorPosCallback&	callback);
 		void operator+=(const WindowResizeCallback& callback);
 
-		inline void pollEvents() const
-		{
-			glfwPollEvents();
-		}
 		inline GLFWwindow*	getWindowHandle(void) const
 		{
 			return _window;
