@@ -27,7 +27,7 @@ namespace vfs
 		void		 processKeyInput	 (void);
 		void		 processCursorPos	 (double xpos, double ypos);
 		void		 processWindowResize (int width, int height);
-		VkSurfaceKHR getWindowSurface	 (VkInstance instance);
+		VkSurfaceKHR createWindowSurface (VkInstance instance);
 
 		void operator+=(const KeyCallback&			callback);
 		void operator+=(const CursorPosCallback&	callback);

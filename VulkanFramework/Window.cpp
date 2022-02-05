@@ -62,7 +62,7 @@ namespace vfs
 		return true;
 	}
 
-	VkSurfaceKHR Window::getWindowSurface(VkInstance instance)
+	VkSurfaceKHR Window::createWindowSurface(VkInstance instance)
 	{
 		VkSurfaceKHR surface;
 		glfwCreateWindowSurface(instance, _window, nullptr, &surface);
