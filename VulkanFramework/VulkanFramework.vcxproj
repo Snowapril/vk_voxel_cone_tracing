@@ -193,7 +193,6 @@
     <ClInclude Include="Queue.h" />
     <ClInclude Include="RenderPass\Framebuffer.h" />
     <ClInclude Include="RenderPass\RenderPass.h" />
-    <ClInclude Include="Semaphore.h" />
     <ClInclude Include="Sync\Fence.h" />
     <ClInclude Include="Sync\Semaphore.h" />
     <ClInclude Include="Utils.h" />
@@ -228,7 +227,6 @@
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="RenderPass\Framebuffer.cpp" />
     <ClCompile Include="RenderPass\RenderPass.cpp" />
-    <ClCompile Include="Semaphore.cpp" />
     <ClCompile Include="Sync\Fence.cpp" />
     <ClCompile Include="Sync\Semaphore.cpp" />
     <ClCompile Include="Utils.cpp" />

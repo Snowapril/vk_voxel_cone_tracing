@@ -133,6 +133,7 @@
     <PreBuildEvent>
       <Message>Compile glsl shader into SPIR-V binary data</Message>
       <Command>for %%i in ($(ProjectDir)\Shaders\*.vert, $(ProjectDir)\Shaders\*.frag, $(ProjectDir)\Shaders\*.geom, $(ProjectDir)\Shaders\*.comp) do glslc "%%i" -o "%%i.spv"
+
 xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -157,18 +158,20 @@ xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(OutputPath)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;imgui.lib;vfsvulkanframework.lib;VkLayer_utils.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent />
     <PreBuildEvent>
       <Message>Compile glsl shader into SPIR-V binary data</Message>
       <Command>for %%i in ($(ProjectDir)\Shaders\*.vert, $(ProjectDir)\Shaders\*.frag, $(ProjectDir)\Shaders\*.geom, $(ProjectDir)\Shaders\*.comp) do glslc "%%i" -o "%%i.spv"
+
 xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sources\Application.cpp" />
+    <ClCompile Include="Sources\Camera.cpp" />
     <ClCompile Include="Sources\Common\CPUTimer.cpp" />
     <ClCompile Include="Sources\Common\GLTFLoader.cpp" />
     <ClCompile Include="Sources\Common\Utils.cpp" />
@@ -196,12 +199,12 @@ xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
     <ClCompile Include="Sources\VoxelEngine\SparseVoxelizer.cpp" />
     <ClInclude Include="Includes\Application.h" />
     <ClInclude Include="Includes\BoundingBox.h" />
+    <ClInclude Include="Includes\Camera.h" />
     <ClInclude Include="Includes\Common\CPUTimer.h" />
     <ClInclude Include="Includes\DirectionalLight.h" />
     <ClInclude Include="Includes\GLTFScene.h" />
     <ClInclude Include="Includes\RenderPass\DownSampler.h" />
     <ClInclude Include="Includes\LoaderThread.h" />
-    <ClInclude Include="Includes\Common\AssetLoader.h" />
     <ClInclude Include="Includes\Common\EngineConfig.h" />
     <ClInclude Include="Includes\Common\GLTFLoader-Impl.hpp" />
     <ClInclude Include="Includes\Common\GLTFLoader.h" />
@@ -231,7 +234,6 @@ xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
     <ClInclude Include="Includes\VoxelEngine\SparseVoxelOctree.h" />
     <ClInclude Include="Includes\VoxelEngine\Counter.h" />
     <ClInclude Include="Includes\VoxelEngine\SparseVoxelizer.h" />
-    <ClCompile Include="Sources\Common\AssetLoader.cpp" />
     <ClCompile Include="Sources\Common\pch.cpp" />
     <ClInclude Include="Sources\Common\Logger.cpp" />
     <ClCompile Include="Sources\Common\VertexFormat.cpp" />
