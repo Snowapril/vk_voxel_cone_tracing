@@ -101,23 +101,19 @@ namespace vfs
 
 		ImGui_ImplGlfw_InitForVulkan(window->getWindowHandle(), true);
 		ImGui_ImplVulkan_InitInfo imGuiInitData = {};
-		imGuiInitData.Device = _device->getDeviceHandle();
-		imGuiInitData.DescriptorPool = _descriptorPool;
-		imGuiInitData.PhysicalDevice = _device->getPhysicalDeviceHandle();
-		imGuiInitData.Allocator = nullptr;
-		imGuiInitData.Instance = _device->getVulkanInstance();
-
-		// TODO(snowapril) : findQueueFamilyIndices use API call which may cause bottleneck. 
-		uint32_t graphicsFamily{ 0 }, presentFamily{ 0 }, loaderFamily{ 0 };
-		_device->findQueueFamilyIndices(&graphicsFamily, &presentFamily, &loaderFamily);
-		imGuiInitData.QueueFamily = graphicsFamily;
+		imGuiInitData.Device			= _device->getDeviceHandle();
+		imGuiInitData.DescriptorPool	= _descriptorPool;
+		imGuiInitData.PhysicalDevice	= _device->getPhysicalDeviceHandle();
+		imGuiInitData.Allocator			= nullptr;
+		imGuiInitData.Instance			= _device->getVulkanInstance();
+		imGuiInitData.QueueFamily		= _graphicsQueue->getFamilyIndex();
 
 		// TODO(snowapril) : minImageCount and imageCount are hard-coded now. need to fix
-		imGuiInitData.Queue = _graphicsQueue->getQueueHandle();
-		imGuiInitData.PipelineCache = VK_NULL_HANDLE;	// TODO(snowapril) : this may cause error
-		imGuiInitData.MinImageCount = 10;				// TODO(snowapril) : this may cause error
-		imGuiInitData.ImageCount = 10;				// TODO(snowapril) : this may cause error
-		imGuiInitData.CheckVkResultFn = nullptr;
+		imGuiInitData.Queue				= _graphicsQueue->getQueueHandle();
+		imGuiInitData.PipelineCache		= VK_NULL_HANDLE;
+		imGuiInitData.MinImageCount		= 10;				// TODO(snowapril) : this may cause error
+		imGuiInitData.ImageCount		= 10;				// TODO(snowapril) : this may cause error
+		imGuiInitData.CheckVkResultFn	= nullptr;
 
 		if (!ImGui_ImplVulkan_Init(&imGuiInitData, renderPass))
 		{
