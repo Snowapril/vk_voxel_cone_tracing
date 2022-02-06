@@ -45,6 +45,7 @@ namespace vfs
         _gltfScenes.clear();
         _mainCamera.reset();
         _renderer.reset();
+        _uiRenderer.reset();
         _mainCommandPool.reset();
         _loaderQueue.reset();
         _presentQueue.reset();
@@ -67,10 +68,6 @@ namespace vfs
         // {
         //     return false;
         // }
-        
-        _renderer = std::make_unique<Renderer>(
-            _device, _mainCommandPool, std::make_unique<SwapChain>(_graphicsQueue, _presentQueue, _window)
-        );
 
         _uiRenderer = std::make_unique<UIRenderer>(_window, _device, _graphicsQueue, _renderer->getRenderPass()->getHandle());
         _uiRenderer->createFontTexture(_mainCommandPool);
@@ -314,8 +311,64 @@ namespace vfs
         _window = std::make_shared<vfs::Window>(DEFAULT_APP_TITLE, 1280, 920);
         _device = std::make_shared<vfs::Device>(DEFAULT_APP_TITLE);
 
+        VkSurfaceKHR surface = _window->createWindowSurface(_device->getVulkanInstance());
+
         uint32_t graphicsFamily{ UINT32_MAX }, presentFamily{ UINT32_MAX }, loaderFamily{ UINT32_MAX };
-        _device->findQueueFamilyIndices(&graphicsFamily, &presentFamily, &loaderFamily);
+        std::vector<VkQueueFamilyProperties> queueFamilyProperties;
+        _device->getQueueFamilyProperties(&queueFamilyProperties);
+
+        // Find queue family which support both graphics & present
+        uint32_t i = 0;
+        bool graphicsBits{ false }, presentBits{ false }, loaderBits{ false };
+        for (const VkQueueFamilyProperties& queueFamilyProperty : queueFamilyProperties)
+        {
+            if (queueFamilyProperty.queueCount > 0 &&
+                (queueFamilyProperty.queueFlags & VK_QUEUE_GRAPHICS_BIT))
+            {
+                graphicsFamily = i;
+                graphicsBits = true;
+            }
+
+            VkBool32 presentSupport = VK_FALSE;
+            vkGetPhysicalDeviceSurfaceSupportKHR(_device->getPhysicalDeviceHandle(), i, surface, &presentSupport);
+            if (queueFamilyProperty.queueCount > 0 && presentSupport == VK_TRUE)
+            {
+                presentFamily = i;
+                presentBits = true;
+            }
+
+            if (graphicsBits && presentBits)
+            {
+                break;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+
+        i = 0;
+        for (const VkQueueFamilyProperties& queueFamilyProperty : queueFamilyProperties)
+        {
+            if (queueFamilyProperty.queueCount > 0 &&
+                (queueFamilyProperty.queueFlags & VK_QUEUE_TRANSFER_BIT) &&
+                (queueFamilyProperty.queueFlags & VK_QUEUE_GRAPHICS_BIT) &&
+                (queueFamilyProperty.queueFlags & VK_QUEUE_COMPUTE_BIT))
+            {
+                loaderFamily = i;
+                loaderBits = true;
+            }
+
+            if (loaderBits && loaderFamily != graphicsFamily) // snowapril : prefer separate family for loader queue
+            {
+                break;
+            }
+            else
+            {
+                ++i;
+            }
+        }
+
         bool isAllFamilyFound = ~graphicsFamily && ~presentFamily && ~loaderFamily;
         if (!isAllFamilyFound)
         {
@@ -335,6 +388,10 @@ namespace vfs
         using namespace std::placeholders;
         Window::KeyCallback inputCallback = std::bind(&Application::processKeyInput, this, _1, _2);
         _window->operator+=(inputCallback);
+
+        _renderer = std::make_unique<Renderer>(
+            _device, _mainCommandPool, std::make_unique<SwapChain>(_graphicsQueue, _presentQueue, _window, surface)
+            );
 
         return true;
     }
