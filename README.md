@@ -1,9 +1,9 @@
 # vk_voxel_cone_tracing (WIP)
 Voxel based global illumination renderer.
 
-Demo scene (WIP)
-
 ![Sponza scene](Media/demo_sponza.png)
+![Sponza scene VXAO](Media/demo_sponza_vxao.png)
+![Demo GIF](Media/demo.gif)
 
 ## Quick Start
 CMake support will be added later
