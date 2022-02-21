@@ -53,13 +53,22 @@ namespace vfs
 		{
 			return { static_cast<uint32_t>(_extent.x), static_cast<uint32_t>(_extent.y) };
 		}
+		inline bool wasWindowResized(void) const
+		{
+			return _wasWindowResized;
+		}
+		inline void setWindowResizedFlag(bool flag)
+		{
+			_wasWindowResized = flag;
+		}
 	private:
 		std::vector<KeyCallback>			_keyCallbacks;
 		std::vector<CursorPosCallback>		_cursorPosCallbacks;
 		std::vector<WindowResizeCallback>	_windowResizeCallbacks;
-		GLFWwindow* _window { nullptr };
-		const char* _title  { nullptr };
-		glm::ivec2	_extent	{   0, 0  };
+		GLFWwindow* _window				{ nullptr };
+		const char* _title				{ nullptr };
+		glm::ivec2	_extent				{   0, 0  };
+		bool		_wasWindowResized	{ false };
 	};
 }
 

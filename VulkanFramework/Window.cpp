@@ -123,5 +123,6 @@ namespace vfs
 		Window* windowPtr = static_cast<Window*>(glfwGetWindowUserPointer(window));
 		assert(window != nullptr); // Jihong Shin : Window pointer must be valid
 		windowPtr->processWindowResize(width, height);
+		windowPtr->setWindowResizedFlag(true);
 	}
 }
