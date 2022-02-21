@@ -5,14 +5,14 @@
 
 namespace vfs
 {
-    uint32_t VertexHelper::GetNumBytes(VertexFormat vertexFormat)
+    unsigned int VertexHelper::GetNumBytes(VertexFormat vertexFormat)
     {
         return GetNumFloats(vertexFormat) * sizeof(float);
     }
 
-    uint32_t VertexHelper::GetNumFloats(VertexFormat vertexFormat)
+    unsigned int VertexHelper::GetNumFloats(VertexFormat vertexFormat)
     {
-        uint32_t numFloats{ 0 };
+        unsigned int numFloats{ 0 };
         if (static_cast<bool>(vertexFormat & VertexFormat::Position3))
         {
             numFloats += 3;

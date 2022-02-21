@@ -46,8 +46,8 @@ namespace vfs
         VertexHelper() = delete;
 
     public:
-        static uint32_t GetNumBytes (VertexFormat vertexFormat);
-        static uint32_t GetNumFloats(VertexFormat vertexFormat);
+        static unsigned int GetNumBytes (VertexFormat vertexFormat);
+        static unsigned int GetNumFloats(VertexFormat vertexFormat);
     };
 }
 
