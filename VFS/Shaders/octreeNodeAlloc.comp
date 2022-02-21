@@ -30,6 +30,5 @@ void main()
 		uint counterValue = atomicAdd(uCounter.value, 1u);
 		uOctree.data[idx].x = ((counterValue + 1u) << 3u) | 0x80000000u; // 2x2x2 child nodes
 		uOctree.data[idx].y = 0;
-		// uOctree.data[idx].y = (counterValue + 1u) * 27u; 				 // 3x3x3 brick
 	}
 }

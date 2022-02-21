@@ -11,8 +11,6 @@ layout ( std430, set = 0, binding = 2 ) readonly buffer FragmentListStorageBuffe
 	uvec2 data[]; 
 } uFragmentList;
 
-// layout (  r32ui, set = 0, binding = 5 ) uniform uimageBuffer uOctreeBrickPool; 
-
 layout ( push_constant ) uniform constants
 {
 	uint fragmentNum;
@@ -21,8 +19,9 @@ layout ( push_constant ) uniform constants
 } uPushConstants;
 
 // Below schemes are referred from OpenGL Insight Chapter 22
-uvec4 convRGBA8ToVec4( uint val);
-uint  convVec4ToRGBA8( uvec4 val);
+vec4 convRGBA8ToVec4( uint val);
+uint convVec4ToRGBA8( vec4 val);
+void atomicRGBA8Avg	( uint index, vec4 val );
 
 void main()
 {
@@ -39,53 +38,59 @@ void main()
 	) >> 1 ; // TODO(snowapril) : why scale half work?
 
 	uint resolution = uPushConstants.voxelResolution;
+	uint targetResolution = 1 << uPushConstants.targetLevel;
 	uint idx = 0, cur = 0; 
 	uvec3 cmp;
 	do {
 		resolution >>= 1;
 		cmp = uvec3(greaterThanEqual(fragPos, uvec3(resolution)));
 		idx = cur + (cmp.z | (cmp.x << 1) | (cmp.y << 2));  // TODO(snowapril) : why rotation work?
-		cur = uOctree.data[idx].x & 0x3fffffff; // Without MSB flag
+		cur = uOctree.data[idx].x & 0x7fffffff; // Without MSB flag
 		fragPos -= cmp * resolution;
-	} while (cur != 0u && resolution > uPushConstants.targetLevel);
+	} while (cur != 0u && resolution > uPushConstants.targetLevel); // TODO(snowapril) : why 1 << targetLevel not work
 
-	if (resolution == uPushConstants.targetLevel) // Leaf node
+	if (resolution == uPushConstants.targetLevel)
 	{
-		 //uint childIndex = uOctree.data[idx].x & 0x3fffffff;
- 		 //vec4 childValueSum = uvec4(0);
-		 //
-		 //for (uint j = 0; j < 8; ++j)
-		 //{
-		 //	childValueSum += convRGBA8ToVec4(uOctree.data[childIndex + j].y) >> 3;
-		 //}
-		 //uOctree.data[idx].y = convVec4ToRGBA8(childValueSum);
-
-		uint childIndex = uOctree.data[idx].x & 0x3fffffff;
+		uint childIndex = uOctree.data[idx].x & 0x7fffffff;
  		vec4 childValueSum = vec4(0);
 		for (uint j = 0; j < 8; ++j)
 		{
-			childValueSum += unpackUnorm4x8(uOctree.data[childIndex + j].y) / 8.0;
+			childValueSum += convRGBA8ToVec4(uOctree.data[childIndex + j].y) / 8.0;
 		}
-		uOctree.data[idx].y = packUnorm4x8(childValueSum);
+		uOctree.data[idx].y = convVec4ToRGBA8(childValueSum);
+		// atomicRGBA8Avg(idx, childValueSum);
 	}
 }
 
-uvec4 convRGBA8ToVec4( uint val) 
-{	
-	return uvec4 (
-		( val  & 0x000000ff ), 
-		(( val & 0x0000ff00 ) >>  8u ),
-		(( val & 0x00ff0000 ) >> 16u ),
-		(( val & 0xff000000 ) >> 24u )
+vec4 convRGBA8ToVec4( uint val) {
+	return vec4(
+	 	float(( val & 0x000000FF )),
+	 	float(( val & 0x0000FF00 ) >> 8U ),
+	 	float(( val & 0x00FF0000 ) >> 16U),
+	 	float(( val & 0xFF000000 ) >> 24U) 
 	);
 }
+uint convVec4ToRGBA8( vec4 val) {
+	return (uint(val.w) & 0x000000FF ) << 24U | 
+	   	   (uint(val.z) & 0x000000FF ) << 16U | 
+	   	   (uint(val.y) & 0x000000FF ) <<  8U | 
+	   	   (uint(val.x) & 0x000000FF );
+}
 
-uint convVec4ToRGBA8( uvec4 val)
+void atomicRGBA8Avg( uint index, vec4 val )
 {
-	return ( 
-		((val.w & 0x000000ff) << 24u) | 
-		((val.z & 0x000000ff) << 16u) | 
-		((val.y & 0x000000ff) <<  8u) | 
-		 (val.x & 0x000000ff)
-	);
+	// val.rgb *= 255.0f; // Optimise following calculations
+	uint newVal = convVec4ToRGBA8(val);
+	uint prevStoredVal = 0; uint curStoredVal;
+
+	// Loop as long as destination value gets changed by other threads
+	while ( ( curStoredVal = atomicCompSwap( uOctree.data[index].y, prevStoredVal, newVal )) != prevStoredVal) 
+	{
+		prevStoredVal = curStoredVal;
+		vec4 rval = convRGBA8ToVec4( curStoredVal);
+		rval.xyz = (rval.xyz * rval.w); 	// Denormalize
+		vec4 curValF = rval + val; 			// Add new value
+		curValF.xyz /= (curValF.w); 		// Renormalize
+		newVal = convVec4ToRGBA8(curValF);
+	}
 }
