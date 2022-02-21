@@ -13,6 +13,9 @@ namespace vfs
 
 	template <typename Type>
 	Type clamp(Type value, Type minValue, Type maxValue);
+
+	// Get directory path of given file included
+	void getDirectory(const char* filePath, char* dir, size_t length);
 }
 
 #include <Common/Utils-Impl.hpp>

@@ -1,4 +1,4 @@
-// Author : Jihong Shin (rubikpril)
+// Author : Jihong Shin (snowapril)
 
 #if !defined(COMMON_UTILS_IMPL_H)
 #define COMMON_UTILS_IMPL_H
