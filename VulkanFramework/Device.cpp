@@ -6,9 +6,9 @@
 #include <VulkanFramework/VulkanExtensions.h>
 #include <VulkanFramework/Window.h>
 #include <GLFW/glfw3.h>
+#include <Common/Logger.h>
 #include <cassert>
 #include <set>
-#include <iostream>
 
 constexpr const char* REQUIRED_EXTENSIONS[] = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 constexpr const char* REQUIRED_LAYERS[]		= { "VK_LAYER_KHRONOS_validation"	};
@@ -79,12 +79,8 @@ namespace vfs
 
 			if (!layerFound)
 			{
-				std::cerr << "[RenderEngine] Failed to find validation layer in this device\n";
+				VFS_ERROR << "Failed to find validation layer in this device";
 				_enableValidationLayer = false;
-			}
-			else
-			{
-				std::clog << "[RenderEngine] Validation layer found\n";
 			}
 		}
 
@@ -102,10 +98,9 @@ namespace vfs
 
 			if (vkCreateDebugUtilsMessengerEXT(_instance, &debugInfo, nullptr, &_debugMessenger) != VK_SUCCESS)
 			{
-				std::cerr << "[RenderEngine] Failed to create debug messenger\n";
+				VFS_ERROR << "Failed to create debug messenger";
 				return false;
 			}
-			std::clog << "[RenderEngine] Debug messenger created\n";
 		}
 
 		if (!pickPhysicalDevice())
@@ -168,8 +163,7 @@ namespace vfs
 		desc->sType				= VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
 		desc->pNext				= nullptr;
 		desc->pUserData			= nullptr;
-		desc->messageSeverity	= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT	|
-								  VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+		desc->messageSeverity	= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT; // VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
 		desc->messageType		= VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT		|
 								  VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT	|
 								  VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
@@ -194,13 +188,13 @@ namespace vfs
 
 		if (_physicalDevice == VK_NULL_HANDLE)
 		{
-			std::cerr << "[RenderEngine] No Available vulkan device\n";
+			VFS_ERROR << "No Available vulkan device";
 			return false;
 		}
 
 		vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceProperties);
 		vkGetPhysicalDeviceFeatures(_physicalDevice, &_physicalDeviceFeatures);
-		std::clog << "[RenderEngine] Selected Physical Device : " << _physicalDeviceProperties.deviceName << '\n';
+		VFS_INFO << "Selected Physical Device : " << _physicalDeviceProperties.deviceName;
 		return true;
 	}
 
@@ -267,7 +261,6 @@ namespace vfs
 		{
 			return false;
 		}
-		std::clog << "[RenderEngine] Logical device created\n";
 
 		return true;
 	}
@@ -323,12 +316,6 @@ namespace vfs
 		
 		std::vector<VkExtensionProperties> properties(extensionCount);
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, properties.data());
-
-		std::clog << "[RenderEngine] Enabled extensions :\n";
-		for (const auto& extensionProperty : properties)
-		{
-			std::clog << '\t' << extensionProperty.extensionName << '\n';
-		}
 
 		std::vector<const char*> requiredExtensions = getRequiredExtensions();
 		// TODO(snowapril) : compare properties and required extensions here.

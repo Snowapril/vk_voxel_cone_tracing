@@ -4,7 +4,6 @@
 #include <VulkanFramework/Pipelines/GraphicsPipeline.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Pipelines/PipelineConfig.h>
-#include <iostream>
 
 namespace vfs
 {
@@ -17,14 +16,7 @@ namespace vfs
 	bool GraphicsPipeline::initializePipeline(const PipelineConfig* pipelineConfig,
 											  const std::vector<VkPipelineShaderStageCreateInfo>& shaderStageInfos)
 	{
-		assert(pipelineConfig != nullptr); // snowapril : given pipeline configuration must be valid
-
-		if (!pipelineConfig->isValid())
-		{
-			std::cerr << "[RenderEngine] PipelineBase configuration structure must "
-						 "be filled before pipeline initialiozation\n";
-			return false;
-		}
+		assert(pipelineConfig != nullptr && pipelineConfig->isValid()); // snowapril : given pipeline configuration must be valid
 
 		VkGraphicsPipelineCreateInfo graphicsPipelineInfo = {};
 		graphicsPipelineInfo.sType					= VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -47,7 +39,6 @@ namespace vfs
 
 		if (vkCreateGraphicsPipelines(_device->getDeviceHandle(), VK_NULL_HANDLE, 1, &graphicsPipelineInfo, nullptr, &_pipeline) != VK_SUCCESS)
 		{
-			std::cerr << "[RenderEngine] Failed to create graphics pipeline\n";
 			return false;
 		}
 

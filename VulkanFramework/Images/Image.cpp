@@ -5,7 +5,6 @@
 #include <VulkanFramework/Images/Image.h>
 #include <VulkanFramework/Commands/CommandPool.h>
 #include <VulkanFramework/Commands/CommandBuffer.h>
-#include <iostream>
 
 namespace vfs
 {

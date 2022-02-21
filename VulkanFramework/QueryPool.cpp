@@ -3,7 +3,6 @@
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/QueryPool.h>
-#include <iostream>
 
 namespace vfs
 {
@@ -43,7 +42,6 @@ namespace vfs
 
 		if (vkCreateQueryPool(_device->getDeviceHandle(), &queryPoolInfo, nullptr, &_queryPool) != VK_SUCCESS)
 		{
-			std::cerr << "[QueryPool] Failed to create query pool\n";
 			return false;
 		}
 

@@ -3,7 +3,6 @@
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/RenderPass/Framebuffer.h>
 #include <VulkanFramework/Device.h>
-#include <iostream>
 
 namespace vfs
 {
@@ -50,7 +49,6 @@ namespace vfs
 
 		if (vkCreateFramebuffer(_device->getDeviceHandle(), &framebufferInfo, nullptr, &_framebuffer) != VK_SUCCESS)
 		{
-			std::cerr << "[RenderEngine] Failed to create framebuffer\n";
 			return false;
 		}
 		return true;

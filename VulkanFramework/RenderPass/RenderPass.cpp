@@ -9,9 +9,9 @@ namespace vfs
 	RenderPass::RenderPass(const DevicePtr& device, 
 						   const std::vector<VkAttachmentDescription>& attachmentDescs,
 						   const std::vector<VkSubpassDependency>& subpassDependencies,
-						   const bool isDepthIncluded)
+						   const std::vector<VkSubpassDescription>& subpassDescs)
 	{
-		assert(initialize(device, attachmentDescs, subpassDependencies, isDepthIncluded));
+		assert(initialize(device, attachmentDescs, subpassDependencies, subpassDescs));
 	}
 
 	RenderPass::~RenderPass()

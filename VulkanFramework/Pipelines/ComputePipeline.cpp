@@ -4,7 +4,6 @@
 #include <VulkanFramework/Pipelines/ComputePipeline.h>
 #include <VulkanFramework/Device.h>
 #include <VulkanFramework/Pipelines/PipelineConfig.h>
-#include <iostream>
 
 namespace vfs
 {
@@ -29,7 +28,6 @@ namespace vfs
 
 		if (vkCreateComputePipelines(_device->getDeviceHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_pipeline) != VK_SUCCESS)
 		{
-			std::cerr << "[RenderEngine] Failed to create compute pipeline\n";
 			return false;
 		}
 

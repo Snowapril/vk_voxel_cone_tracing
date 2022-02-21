@@ -6,7 +6,6 @@
 #include <VulkanFramework/Pipelines/PipelineConfig.h>
 #include <fstream>
 #include <cassert>
-#include <iostream>
 
 namespace vfs
 {
@@ -58,16 +57,12 @@ namespace vfs
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline);
 	}
 
-	void PipelineBase::addShaderModule(VkShaderStageFlagBits stage, const char* shaderPath,
-									   const VkSpecializationInfo* specialInfo)
+	void PipelineBase::attachShaderModule(VkShaderStageFlagBits stage, const char* shaderPath,
+										  const VkSpecializationInfo* specialInfo)
 	{
 		std::vector<char> tempData;
-		if (!ReadSpirvShaderFile(shaderPath, &tempData))
-		{
-			std::cerr << "[RenderEngine] Failed to read SPIR-V shader path ("
-				<< shaderPath
-				<< ")\n";
-		}
+		assert(ReadSpirvShaderFile(shaderPath, &tempData)); // snowapril : SpirV file must exists in proudct
+
 		VkPipelineShaderStageCreateInfo pipelineShaderStageInfo = {};
 		pipelineShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 		pipelineShaderStageInfo.pNext = nullptr;

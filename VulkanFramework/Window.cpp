@@ -3,8 +3,8 @@
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Window.h>
 #include <VulkanFramework/DebugUtils.h>
+#include <Common/Logger.h>
 #include <cassert>
-#include <iostream>
 
 namespace vfs
 {
@@ -38,7 +38,7 @@ namespace vfs
 
 		if (glfwInit() == GLFW_FALSE)
 		{
-			std::cerr << "[RenderEngine] Failed to initialize GLFW\n";
+			VFS_ERROR << "Failed to initialize GLFW";
 			return false;
 		}
 
@@ -49,7 +49,7 @@ namespace vfs
 
 		if (glfwVulkanSupported() == 0)
 		{
-			std::cerr << "[RenderEngine] This device does not support Vulkan\n";
+			VFS_ERROR << "This device does not support Vulkan";
 			return false;
 		}
 
@@ -58,7 +58,6 @@ namespace vfs
 		glfwSetCursorPosCallback(_window, ProcessCursorPosCallback);
 		glfwSetErrorCallback(DebugUtils::GlfwDebugCallback);
 
-		std::clog << "[RenderEngine] GLFW window instance initialized\n";
 		return true;
 	}
 
