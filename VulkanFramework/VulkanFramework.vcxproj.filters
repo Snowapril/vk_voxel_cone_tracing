@@ -102,6 +102,9 @@
     <ClInclude Include="Sync\Fence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ForwardDeclarations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

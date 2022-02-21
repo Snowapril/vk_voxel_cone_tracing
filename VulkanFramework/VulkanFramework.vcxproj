@@ -178,6 +178,7 @@
     <ClInclude Include="Descriptors\DescriptorSet.h" />
     <ClInclude Include="Descriptors\DescriptorSetLayout.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="ForwardDeclarations.h" />
     <ClInclude Include="FrameLayout.h" />
     <ClInclude Include="Images\Image.h" />
     <ClInclude Include="Images\ImageView.h" />
