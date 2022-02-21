@@ -15,10 +15,8 @@ struct DirectionalLightDesc {
 struct DirectionalLightShadowDesc {
 	mat4 view;        // 16
 	mat4 proj;		  // 32
-	// float zNear;	  // 36
-	// float zFar;		  // 40
-	// float pcfRadius;  // 44
-	// int padding;	  // 48
+	float zNear;	  // 36
+	float zFar;		  // 40
 };
 
 #endif
