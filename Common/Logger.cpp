@@ -2,44 +2,127 @@
 
 #include <Common/pch.h>
 #include <Common/Logger.h>
-#include <cassert>
+#include <iostream>
+#include <ctime>
+#include <mutex>
 
 namespace vfs
 {
-	enum class LogLevel : unsigned char
+	static std::mutex		critical;
+	static LogLevel			logLevel	= LogLevel::AllLevel;
+	static std::ostream*	debugStream = &std::cout;
+	static std::ostream*	infoStream	= &std::cout;
+	static std::ostream*	warnStream	= &std::cout;
+	static std::ostream*	errorStream = &std::cerr;
+
+	std::string LevelToString(LogLevel level)
 	{
-		INFO_LEVEL = 0,
-		LOG_LEVEL = 1,
-		ERROR_LEVEL = 2,
-	};
+		switch (level)
+		{
+		case LogLevel::Debug:
+			return "[Debug]";
+		case LogLevel::Info:
+			return "[Info]";
+		case LogLevel::Warn:
+			return "[Warn]";
+		case LogLevel::Error:
+			return "[Error]";
+		case LogLevel::AllLevel:
+		case LogLevel::Off:
+		default:
+			return "";
+		}
+	}
+
+	std::ostream* LevelToStream(LogLevel level)
+	{
+		switch (level)
+		{
+		case LogLevel::Debug:
+			return debugStream;
+		case LogLevel::Warn:
+			return warnStream;
+		case LogLevel::Error:
+			return errorStream;
+		case LogLevel::Off:
+			return nullptr;
+		case LogLevel::AllLevel:
+		case LogLevel::Info:
+		default:
+			return infoStream;
+		}
+	}
+
+	Logger::Logger(LogLevel level)
+		: _logLevel(level)
+	{
+		// Do nothing
+	}
 
 	Logger::~Logger()
 	{
-		destroyLogger();
+		std::lock_guard<std::mutex> lock(critical);
+		if (static_cast<uint8_t>(_logLevel) >= static_cast<uint8_t>(logLevel))
+		{
+			std::ostream* stream = LevelToStream(_logLevel);
+			*stream << _logBuffer.str() << std::endl;
+			stream->flush();
+		}
 	}
 
-	bool Logger::initialize(const char* logFileName, LogLevel logLevel)
+	std::string	Logging::GetHeader(LogLevel level)
 	{
-		unsigned char level = static_cast<unsigned char>(logLevel);
+		std::time_t now =
+			std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		char timeStr[20];
 
-		// TODO(snowapril) : connect cout, clog, cerr to given file stream
-		if (level <= static_cast<unsigned char>(LogLevel::INFO_LEVEL))
-		{
-			
-		}
-		if (level <= static_cast<unsigned char>(LogLevel::LOG_LEVEL))
-		{
+		// TODO(snowapril) : need to handle cross-platform time
+		tm time;
+		localtime_s(&time, &now);
+		strftime(timeStr, sizeof(timeStr), "%F %T", &time);
 
-		}
-		if (level <= static_cast<unsigned char>(LogLevel::ERROR_LEVEL))
-		{
+		char header[256];
+		snprintf(header, sizeof(header), "[%s] %s ", LevelToString(level).c_str(),
+			timeStr);
 
-		}
-
-		return true;
+		return header;
 	}
 
-	void Logger::destroyLogger()
+	void Logging::SetDebugStream(std::ostream* stream)
 	{
+		std::lock_guard<std::mutex> lock(critical);
+		debugStream = stream;
+	}
+
+	void Logging::SetInfoStream(std::ostream* stream)
+	{
+		std::lock_guard<std::mutex> lock(critical);
+		infoStream = stream;
+	}
+
+	void Logging::SetWarnStream(std::ostream* stream)
+	{
+		std::lock_guard<std::mutex> lock(critical);
+		warnStream = stream;
+	}
+
+	void Logging::SetErrorStream(std::ostream* stream)
+	{
+		std::lock_guard<std::mutex> lock(critical);
+		errorStream = stream;
+	}
+
+	void Logging::SetAllStream(std::ostream* stream)
+	{
+		SetDebugStream(stream);
+		SetInfoStream(stream);
+		SetWarnStream(stream);
+		SetErrorStream(stream);
+	}
+
+	void Logging::SetLevel(LogLevel level)
+	{
+		std::lock_guard<std::mutex> lock(critical);
+		logLevel = level;
 	}
 }
