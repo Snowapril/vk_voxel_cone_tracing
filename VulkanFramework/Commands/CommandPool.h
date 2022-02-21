@@ -4,6 +4,8 @@
 #define VULKAN_FRAMEWORK_COMMAND_POOL_H
 
 #include <VulkanFramework/pch.h>
+#include <VulkanFramework/Commands/CommandBuffer.h>
+#include <functional>
 
 namespace vfs
 {
@@ -18,9 +20,13 @@ namespace vfs
 		explicit CommandPool(DevicePtr device, QueuePtr queue, VkCommandPoolCreateFlags flags);
 				~CommandPool();
 
+		using SingleSubmitFn = std::function<void(CommandBuffer)>;
+
 	public:
 		bool initialize			(DevicePtr device, QueuePtr queue, VkCommandPoolCreateFlags flags);
 		void destroyCommandPool	(void);
+		void submitOnce			(const SingleSubmitFn& cmdFunc);
+
 		VkCommandBuffer				 allocateCommandBuffer			(void);
 		std::vector<VkCommandBuffer> allocateMultipleCommandBuffer	(const uint32_t numAlloc);
 		void						 freeCommandBuffers				(const std::vector<VkCommandBuffer>& cmdBuffers);

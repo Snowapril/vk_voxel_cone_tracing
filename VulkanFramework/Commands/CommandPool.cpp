@@ -3,6 +3,7 @@
 #include <VulkanFramework/pch.h>
 #include <VulkanFramework/Commands/CommandPool.h>
 #include <VulkanFramework/Device.h>
+#include <VulkanFramework/Sync/Fence.h>
 #include <VulkanFramework/Queue.h>
 
 namespace vfs
@@ -44,6 +45,23 @@ namespace vfs
 		}
 		_queue.reset();
 		_device.reset();
+	}
+
+	void CommandPool::submitOnce(const SingleSubmitFn& cmdFunc)
+	{
+		CommandBuffer cmdBuffer(allocateCommandBuffer());
+		{
+			cmdBuffer.beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+
+			// Record commands in caller-side
+			cmdFunc(cmdBuffer);
+
+			cmdBuffer.endRecord();
+		}
+
+		Fence fence(_device, 1, 0);
+		_queue->submitCmdBuffer({ cmdBuffer }, &fence);
+		fence.waitForAllFences(UINT64_MAX);
 	}
 
 	VkCommandBuffer CommandPool::allocateCommandBuffer(void)
