@@ -1,0 +1,30 @@
+#version 450
+layout ( local_size_x = 8, local_size_y = 8, local_size_z = 8 ) in;
+
+layout ( constant_id = 0 ) const int BORDER_WIDTH = 1;
+
+layout ( set = 0, binding = 0 ) uniform sampler3D uSrcClipmapTexture;
+layout ( rgba8, set = 0, binding = 1 ) uniform image3D uDstClipmapTexture;
+
+layout ( push_constant ) uniform PushConstants
+{
+    int uClipLevel;          //  4
+    int uClipmapResolution;  //  8
+    int uFaceCount;          // 12
+};
+
+void main()
+{
+    ivec3 pos = ivec3(gl_GlobalInvocationID);
+    int resolutionWithBorder = uClipmapResolution + BORDER_WIDTH * 2;
+    pos += ivec3(BORDER_WIDTH);
+    pos.y += uClipLevel * resolutionWithBorder;
+
+    for (int i = 0; i < uFaceCount; ++i)
+    {
+        vec4 dst = imageLoad(uDstClipmapTexture, pos + ivec3(resolutionWithBorder * i, 0, 0));
+        float alpha = texelFetch(uSrcClipmapTexture, pos + ivec3(resolutionWithBorder * i, 0, 0), 0).a;
+        dst.a = alpha;
+        imageStore(uDstClipmapTexture, pos + ivec3(resolutionWithBorder * i, 0, 0), dst);
+    }
+}
