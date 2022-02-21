@@ -1,0 +1,31 @@
+#version 450
+layout ( local_size_x = 8, local_size_y = 8, local_size_z = 8 ) in;
+
+layout ( constant_id = 0 ) const int BORDER_WIDTH = 1;
+
+layout (  rgba8, set = 0, binding = 0 ) uniform image3D uClipmapTexture;
+
+layout ( push_constant ) uniform PushConstants
+{
+    ivec3 uRegionMinCorner;    // 12
+    int   uClipLevel;          // 16
+    uvec3 uClipMaxExtent;      // 28
+    int   uClipmapResolution;  // 32
+    uint  uFaceCount;          // 36
+};
+
+void main()
+{
+    if (any(greaterThanEqual(gl_GlobalInvocationID, uClipMaxExtent)))
+    	return;
+
+    ivec3 pos = (ivec3(gl_GlobalInvocationID) + uRegionMinCorner) % uClipmapResolution;
+    int resolutionWithBorder = uClipmapResolution + BORDER_WIDTH * 2;
+    pos     += ivec3(BORDER_WIDTH);
+    pos.y   += uClipLevel * resolutionWithBorder;
+
+    for (int i = 0; i < uFaceCount; ++i)
+    {
+        imageStore(uClipmapTexture, pos + ivec3(resolutionWithBorder * i, 0, 0), vec4(0.0));
+    }
+}
