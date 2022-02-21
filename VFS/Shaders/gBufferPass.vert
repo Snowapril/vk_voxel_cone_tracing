@@ -8,8 +8,7 @@ layout (location = 3) in vec4 aTangent;
 layout (location = 0) out VS_OUT {
 	vec3 normal;
 	vec2 texCoord;
-	vec3 tangent;
-	vec3 bitangent;
+	vec4 tangent;
 } vs_out;
 
 layout ( set = 0, binding = 0 ) uniform CamMatrix
@@ -41,8 +40,7 @@ void main()
 {
 	vs_out.texCoord	 = aTexCoord;
 	vs_out.normal	 = (uNodeMatrices[uInstanceIndex].itModel * vec4(aNormal, 0.0)).xyz;
-	vs_out.tangent	 = (uNodeMatrices[uInstanceIndex].itModel * vec4(aTangent.xyz, 0.0)).xyz;
-	vs_out.bitangent = cross(vs_out.normal, vs_out.tangent) * aTangent.w;
+	vs_out.tangent	 = vec4((uNodeMatrices[uInstanceIndex].itModel * vec4(aTangent.xyz, 0.0)).xyz, aTangent.w);
 
 	gl_Position = uViewProj * uNodeMatrices[uInstanceIndex].model * vec4(aPosition, 1.0);
 }

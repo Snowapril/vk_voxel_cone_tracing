@@ -7,14 +7,14 @@ layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM = 69;
 layout (location = 0) in VS_OUT {
 	vec3 normal;
 	vec2 texCoord;
-	vec3 tangent;
-	vec3 bitangent;
+	vec4 tangent;
 } fs_in;
 
-layout (location = 0) out vec4 diffuse;
-layout (location = 1) out vec4 normal;
-layout (location = 2) out vec4 specular;
-layout (location = 3) out vec4 emission;
+layout (location = 0) out vec4 gbufferDiffuse;
+layout (location = 1) out vec4 gbufferNormal;
+layout (location = 2) out vec4 gbufferSpecular;
+layout (location = 3) out vec4 gbufferEmission;
+layout (location = 4) out vec4 gbufferTangent;
 
 
 layout ( std430, set = 1, binding = 1) readonly buffer MaterialBuffer
@@ -44,9 +44,12 @@ vec3 getNormal(int normalTexture)
 		vec3 normalSample = texture(uTextures[normalTexture], fs_in.texCoord).rgb;
 		normalSample = 2.0 * normalSample - 1.0;
 		
+		vec3 tangent = fs_in.tangent.xyz;
+		vec3 bitangent = cross(fs_in.normal, fs_in.tangent.xyz) * fs_in.tangent.w;
+
 		return normalize(
-			normalSample.x * normalize(fs_in.tangent) + 
-			normalSample.y * normalize(fs_in.bitangent) + 
+			normalSample.x * normalize(tangent) 	+ 
+			normalSample.y * normalize(bitangent) 	+ 
 			normalSample.z * normalize(fs_in.normal)
 		);
 	}
@@ -69,8 +72,8 @@ void main()
 
 	perceptualRoughness = material.pbrRoughnessFactor;
 	metallic = material.pbrMetallicFactor;
-	//! Roughness is stored in the 'g' channel, metallic is stored in the 'b' channel
-	//! This layout intentionally reserves the	 'r' channel for (optional) occlusion map data
+	// Roughness is stored in the 'g' channel, metallic is stored in the 'b' channel
+	// This layout intentionally reserves the 'r' channel for (optional) occlusion map data
 	if (material.pbrMetallicRoughnessTexture > -1)
 	{
 		vec4 mrSample = texture(uTextures[material.pbrMetallicRoughnessTexture], fs_in.texCoord);
@@ -85,21 +88,29 @@ void main()
 
 	baseColor = material.pbrBaseColorFactor;
 	if (material.pbrBaseColorTexture > -1)
+	{
 		baseColor *= texture(uTextures[material.pbrBaseColorTexture], fs_in.texCoord);
+	}
 	diffuseColor = baseColor.rgb * (vec3(1.0) - f0) * (1.0 - metallic);
 	specularColor = mix(f0, baseColor.rgb, metallic);
 
 	if (material.alphaMode > 0 && baseColor.a < material.alphaCutoff)
+	{
 		discard;
+	}
+	
+	gbufferDiffuse  = vec4(diffuseColor, perceptualRoughness);
+	gbufferSpecular = vec4(specularColor, metallic);
+	gbufferNormal 	= vec4(getNormal(material.normalTexture) * 0.5 + 0.5, 1.0);
+	// gbufferNormal = vec4(normalize(fs_in.normal) * 0.5 + 0.5, 1.0);
 
-	diffuse   = vec4(diffuseColor, perceptualRoughness);
-	specular = vec4(specularColor, metallic);
-	normal 	 = vec4(getNormal(material.normalTexture) * 0.5 + 0.5, 1.0);
-
-	vec3 emissionColor 			= vec3(0.0, 0.0, 0.0);
+	vec4 tangent = vec4(normalize(fs_in.tangent.xyz), fs_in.tangent.w);
+	gbufferTangent = vec4(tangent * 0.5 + 0.5);
+	
+	vec3 emissionColor 			= material.emissiveFactor;
 	if (material.emissiveTexture > -1)
 	{
-		emissionColor = SRGBtoLinear(texture(uTextures[material.emissiveTexture], fs_in.texCoord), 2.2).rgb * material.emissiveFactor;
+		emissionColor *= SRGBtoLinear(texture(uTextures[material.emissiveTexture], fs_in.texCoord), 2.2).rgb;
 	}
-	emission = vec4(emissionColor, 1.0);
+	gbufferEmission = vec4(emissionColor, 1.0);
 }
