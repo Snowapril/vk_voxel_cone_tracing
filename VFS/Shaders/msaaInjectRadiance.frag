@@ -5,9 +5,10 @@
 #include "shadow.glsl"
 #include "light.glsl"
 
-#define BORDER_WIDTH 2
+#define BORDER_WIDTH 1
 
-layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM = 69;
+layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM 	 = 69;
+layout( constant_id = 1 ) const uint NUM_POISSON_SAMPLES = 151;
 
 layout( location = 0 ) in GS_OUT {
 	vec3 position;
@@ -23,6 +24,11 @@ layout ( std430, set = 1, binding = 1) readonly buffer MaterialBuffer
 layout ( set = 1, binding = 2 ) uniform sampler2D uTextures[MAX_TEXTURE_NUM];
 
 layout ( set = 2, binding = 0, r32ui ) volatile uniform uimage3D uVoxelRadiance;
+layout ( set = 2, binding = 1, rgba8 ) uniform readonly image3D uVoxelOpacity;
+layout ( std140, set = 2, binding = 2 ) uniform readonly PoissonSamples
+{
+	vec2 uPoissonSamples[NUM_POISSON_SAMPLES];
+};
 
 layout ( std140, set = 3, binding = 2 ) uniform VoxelizationDesc {
 	vec3 	uRegionMinCorner;
@@ -35,15 +41,16 @@ layout ( std140, set = 3, binding = 2 ) uniform VoxelizationDesc {
 	int 	uClipmapResolution;
 };
 
-layout ( set = 4, binding = 0 ) uniform sampler2D uShadowMaps;
-
-layout ( set = 4, binding = 1 ) uniform  DirectionalLight {
+layout ( set = 4, binding = 0 ) uniform sampler2D uRSMPosition;
+layout ( set = 4, binding = 1 ) uniform sampler2D uRSMNormal;
+layout ( set = 4, binding = 2 ) uniform sampler2D uRSMFlux;
+layout ( set = 4, binding = 3 ) uniform sampler2D uRSMShadowMap;
+layout ( set = 4, binding = 4 ) uniform DirectionalLight {
 	DirectionalLightDesc uDirectionalLight;
 };
-
-// layout ( set = 4, binding = 2 ) uniform DirectionalLightShadowDesc {
-// 	DirectionalLightShadowDesc uDirectionalLightShadow;
-// };
+layout ( set = 4, binding = 5 ) uniform DirectionalLightShadow {
+	DirectionalLightShadowDesc uDirectionalLightShadow;
+};
 
 layout ( push_constant ) uniform PushConstants
 {
@@ -55,17 +62,18 @@ layout ( push_constant ) uniform PushConstants
 vec3  worldPosToClipmap			(vec3 pos, float maxExtent);
 ivec3 calculateImageCoords		(vec3 worldPos);
 ivec3 calculateVoxelFaceIndex	(vec3 normal);
-void  voxelAtomicRGBA8Avg 		(vec3 worldPos, ivec3 faceIndex, vec4 color, vec3 weight);
-void  voxelAtomicRGBA8Avg6Faces	(vec3 worldPos, vec4 color);
+void  voxelAtomicRGBA8Avg 		(ivec3 imageCoord, ivec3 faceIndex, vec4 color, vec3 weight);
+void  voxelAtomicRGBA8Avg6Faces	(ivec3 imageCoord, vec4 color);
 
 void main()
 {
 	GltfShadeMaterial material = uMaterials[uMaterialIndex];
+	ivec3 imageCoord = calculateImageCoords(fs_in.position);
 
 	if (material.occlusionTexture > -1 && texture(uTextures[material.occlusionTexture], fs_in.texCoord).r < 0.1)
 		discard;
 
-	if ((material.emissiveFactor.x > 0.0) || (material.emissiveFactor.y > 0.0) || (material.emissiveFactor.z > 0.0))
+	if (any(greaterThan(material.emissiveFactor, vec3(0.0))))
 	{
 		vec4 emission = vec4(material.emissiveFactor, 1.0);
 		if (material.emissiveTexture > -1)
@@ -74,33 +82,75 @@ void main()
 			emission.rgb += textureLod(uTextures[material.emissiveTexture], fs_in.texCoord, lod).rgb;
 		}
 		emission.rgb = clamp(emission.rgb, 0.0, 1.0);
-		voxelAtomicRGBA8Avg6Faces(fs_in.position, emission);
+		voxelAtomicRGBA8Avg6Faces(imageCoord, emission);
 	}
 	else
 	{
-		vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+		// float opacity = imageLoad(uVoxelOpacity, imageCoord).a;
+		// if (opacity > 1e-6)
+		// {
+		// 	vec3 lightSpacePos = (uDirectionalLightShadow.view * vec4(fs_in.position, 1.0)).xyz;
+		// 	lightSpacePos.z /= uDirectionalLightShadow.zFar - uDirectionalLightShadow.zNear;
+		// 	lightSpacePos.xy = (uDirectionalLightShadow.proj * vec4(lightSpacePos.xy, 0.0, 1.0)).xy;
+		// 	lightSpacePos.xy = lightSpacePos.xy * 0.5 + 0.5;
+		// 	
+		// 	vec3 normal = normalize(fs_in.normal);
+		// 	
+		// 	float visibility = calcShadowCoefficientPCF16(uRSMShadowMap, vec4(lightSpacePos, 1.0));
+		// 	if (visibility > 1e-6)
+		// 	{
+		// 		vec3 radiance = vec3(0.0);
+		// 		for (int i = 0; i < NUM_POISSON_SAMPLES; ++i)
+		// 		{
+		//			// References on "Reflective Shadow Map" (https://users.soe.ucsc.edu/~pang/160/s13/proposal/mijallen/proposal/media/p203-dachsbacher.pdf)
+		// 			vec3 lightSpacePos_p = vec3(lightSpacePos.xy + 0.09 * uPoissonSamples[i], lightSpacePos.z);
+		// 			vec3 n_p = textureProj(uRSMNormal, vec4(lightSpacePos_p, 1.0)).xyz * 2.0 - 1.0;
+		// 			vec3 x_p = textureProj(uRSMPosition, vec4(lightSpacePos_p, 1.0)).xyz;
+		// 			vec3 flux = textureProj(uRSMFlux, vec4(lightSpacePos_p, 1.0)).rgb;
+		// 			
+		// 			vec3 diff = fs_in.position - x_p;
+		// 			float d2 = dot(diff, diff);
+		// 			
+		// 			vec3 E_p = flux * max(0.0, dot(n_p, diff)) * max(0.0, dot(normal, -diff));
+		// 			E_p *= uPoissonSamples[i].x * uPoissonSamples[i].x / abs(d2 * d2);
+		// 			
+		// 			radiance += E_p;
+		// 		}
+		// 		
+		// 		if (all(equal(radiance, vec3(0.0))))
+		// 		{
+		// 			discard;
+		// 		}
+		// 		
+		// 		radiance = clamp(radiance * visibility * uDirectionalLight.color * uDirectionalLight.intensity * 0.4, 0.0, 1.0);
+		// 		ivec3 faceIndex = calculateVoxelFaceIndex(-normal);
+		// 		voxelAtomicRGBA8Avg(imageCoord, faceIndex, vec4(radiance, 1.0), abs(normal));
+		// 	}
+		// }
+		
+		vec4 color = material.pbrBaseColorFactor;
 		if (material.pbrBaseColorTexture > -1)
 		{
 			float lod = log2(float(textureSize(uTextures[material.pbrBaseColorTexture], 0).x) / uClipmapResolution);
-			color = textureLod(uTextures[material.pbrBaseColorTexture], fs_in.texCoord, lod) * material.pbrBaseColorFactor;
+			color *= textureLod(uTextures[material.pbrBaseColorTexture], fs_in.texCoord, lod);
 		}
 
 		vec3 normal = normalize(fs_in.normal);
-		vec3 lightContribution = vec3(0.0);
+		vec3 lightDir = normalize(-uDirectionalLight.direction);
 
+		vec3 lightContribution = vec3(0.0);
 		// Calculate light contribution here
-		float NdotL = max(dot(normal, -uDirectionalLight.direction), 0.0);
-		float visibility = 1.0; // TODO(snowapril) : calcShadowCoefficientPCF16(uShadowMaps, fs_in.position);
+		float NdotL = clamp(dot(normal, lightDir), 0.001, 1.0);
+		float visibility = calcVisibility(uRSMShadowMap, uDirectionalLightShadow, fs_in.position);
 		lightContribution += NdotL * visibility * uDirectionalLight.color * uDirectionalLight.intensity;
 
 		if (all(equal(lightContribution, vec3(0.0))))
 			discard;
 
-		vec3 radiance = lightContribution * color.rgb * color.a; // TODO(snowapril) : different diffuse with reference
+		vec3 radiance = lightContribution * color.rgb * color.a;
 		radiance = clamp(radiance, 0.0, 1.0);
-
 		ivec3 faceIndex = calculateVoxelFaceIndex(-normal);
-		voxelAtomicRGBA8Avg(fs_in.position, faceIndex, vec4(radiance, 1.0), abs(normal));
+		voxelAtomicRGBA8Avg(imageCoord, faceIndex, vec4(radiance, 1.0), abs(normal));
 	}
 }
 
@@ -116,9 +166,9 @@ ivec3 calculateImageCoords(vec3 worldPos)
 	
 	vec3 clipCoords = worldPosToClipmap(worldPos, uClipMaxExtent);
 
-	ivec3 imageCoords = ivec3(clipCoords * float(uClipmapResolution)) & (uClipmapResolution - 1);
-	imageCoords += ivec3(BORDER_WIDTH);
-	imageCoords.y += int((uClipmapResolution + BORDER_WIDTH) * uClipLevel);
+	ivec3 imageCoords = ivec3(clipCoords * float(uClipmapResolution)) % uClipmapResolution; // & (uClipmapResolution - 1);
+	imageCoords 	 += ivec3(BORDER_WIDTH);
+	imageCoords.y 	 += int((uClipmapResolution + 2) * uClipLevel);
 	
 	return ivec3(imageCoords);
 }
@@ -150,21 +200,18 @@ void imageAtomicRGBA8Avg(ivec3 coords, vec4 value )
 	}
 }
 
-void voxelAtomicRGBA8Avg(vec3 worldPos, ivec3 faceIndex, vec4 color, vec3 weight)
+void voxelAtomicRGBA8Avg(ivec3 imageCoord, ivec3 faceIndex, vec4 color, vec3 weight)
 {
-	ivec3 imageCoord = calculateImageCoords(worldPos);
-
-	imageAtomicRGBA8Avg(imageCoord + ivec3((uClipmapResolution + BORDER_WIDTH) * faceIndex.x, 0, 0), vec4(color.xyz * weight.x, 1.0));
-	imageAtomicRGBA8Avg(imageCoord + ivec3((uClipmapResolution + BORDER_WIDTH) * faceIndex.y, 0, 0), vec4(color.xyz * weight.y, 1.0));
-	imageAtomicRGBA8Avg(imageCoord + ivec3((uClipmapResolution + BORDER_WIDTH) * faceIndex.z, 0, 0), vec4(color.xyz * weight.z, 1.0));
+	imageAtomicRGBA8Avg(imageCoord + ivec3((uClipmapResolution + 2) * faceIndex.x, 0, 0), vec4(color.xyz * weight.x, 1.0));
+	imageAtomicRGBA8Avg(imageCoord + ivec3((uClipmapResolution + 2) * faceIndex.y, 0, 0), vec4(color.xyz * weight.y, 1.0));
+	imageAtomicRGBA8Avg(imageCoord + ivec3((uClipmapResolution + 2) * faceIndex.z, 0, 0), vec4(color.xyz * weight.z, 1.0));
 }
 
-void voxelAtomicRGBA8Avg6Faces(vec3 worldPos, vec4 color)
+void voxelAtomicRGBA8Avg6Faces(ivec3 imageCoord, vec4 color)
 {
-	ivec3 imageCoord = calculateImageCoords(worldPos);
 	for (uint i = 0; i < 6; ++i)
 	{
 		imageAtomicRGBA8Avg(imageCoord, color);
-		imageCoord.x += uClipmapResolution + BORDER_WIDTH;
+		imageCoord.x += uClipmapResolution + 2;
 	}
 }
