@@ -28,7 +28,7 @@ float calcShadowCoefficientPCF16(sampler2D map, vec4 shadowCoord)
 float calcVisibility(sampler2D map, DirectionalLightShadowDesc lightShadowDesc, vec3 worldPos)
 {
 	vec3 lightSpacePos = (lightShadowDesc.view * vec4(worldPos, 1.0)).xyz;
-	// lightSpacePos.z /= 
+	lightSpacePos.z /= lightShadowDesc.zFar - lightShadowDesc.zNear;
 	lightSpacePos.xy = (lightShadowDesc.proj * vec4(lightSpacePos.xy, 0.0, 1.0)).xy;
 	lightSpacePos.xy = lightSpacePos.xy * 0.5 + 0.5;
 
