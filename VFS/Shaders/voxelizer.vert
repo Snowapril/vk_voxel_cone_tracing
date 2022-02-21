@@ -21,9 +21,15 @@ layout ( std430, set = 1, binding = 0) readonly buffer MatrixBuffer
     NodeMatrix uNodeMatrices[];
 };
 
+layout ( std140, set = 3, binding = 1 ) uniform SceneDimension {  
+    vec3 uSceneWorldBBMin;
+    vec3 uSceneWorldBBMax;
+};
 
 layout ( push_constant ) uniform PushConstants
 {
+    uint uVoxelResolution;
+    uint uIsCountMode;
     uint uInstanceIndex;
     uint uMaterialIndex;
 };
@@ -33,5 +39,10 @@ void main()
     vs_out.texCoord  = aTexCoord;
     vs_out.normal    = (uNodeMatrices[uInstanceIndex].itModel * vec4(aNormal, 0.0)).xyz;
 
-    gl_Position = uNodeMatrices[uInstanceIndex].model * vec4(aPosition, 1.0);
+    vec3 extent = uSceneWorldBBMax - uSceneWorldBBMin;
+    float extentValue = max(extent.x, max(extent.y, extent.z)) * 0.5;
+    vec3 center = (uSceneWorldBBMin + uSceneWorldBBMax) * 0.5;
+
+    vec4 worldPos = uNodeMatrices[uInstanceIndex].model * vec4(aPosition, 1.0);
+    gl_Position = vec4((worldPos.xyz - center) / extentValue, 1.0);
 }

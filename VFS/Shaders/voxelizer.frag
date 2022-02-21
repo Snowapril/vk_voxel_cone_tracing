@@ -2,8 +2,9 @@
 
 #include "gltf.glsl"
 #include "light.glsl"
+#include "shadow.glsl"
 
-layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM = 16;
+layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM = 69;
 
 layout( location = 0 ) in GS_OUT {
     vec3 position;
@@ -11,36 +12,38 @@ layout( location = 0 ) in GS_OUT {
     vec2 texCoord;
 } fs_in;
 
-layout ( std430, set = 1, binding = 1) readonly buffer MaterialBuffer
-{
-	GltfShadeMaterial uMaterials[];
-};
-
-layout ( set = 1, binding = 0 ) uniform sampler2D uTextures[MAX_TEXTURE_NUM];
-
-
-layout ( std140, set = 2, binding = 0 ) buffer CounterStorageBuffer
+layout ( std140, set = 0, binding = 0 ) buffer CounterStorageBuffer
 { 
-	uint value; 
-} uCounter;
-
-layout ( std430, set = 2, binding = 1 ) writeonly buffer FragmentList
+	uint uCounterValue; 
+};
+layout ( std430, set = 0, binding = 1 ) writeonly buffer FragmentList
 { 
 	uvec2 uFragmentList[]; 
 };
 
-layout ( set = 3, binding = 0 ) uniform sampler2D uShadowMaps;
-layout ( set = 3, binding = 1 ) uniform DirectionalLight {
+layout ( std430, set = 1, binding = 1) readonly buffer MaterialBuffer
+{
+	GltfShadeMaterial uMaterials[];
+};
+layout ( set = 1, binding = 2 ) uniform sampler2D uTextures[MAX_TEXTURE_NUM];
+
+layout ( set = 2, binding = 0 ) uniform sampler2D uShadowMaps;
+layout ( set = 2, binding = 1 ) uniform DirectionalLight {
 	DirectionalLightDesc uDirectionalLight;
+};
+layout ( set = 2, binding = 2 ) uniform DirectionalLightShadow {
+	DirectionalLightShadowDesc uDirectionalLightShadow;
 };
 
 layout ( push_constant ) uniform PushConstants
 {
-	uint uInstanceIndex;
-	uint uMaterialIndex;
 	uint uVoxelResolution;
 	uint uIsCountMode;
+	uint uInstanceIndex;
+	uint uMaterialIndex;
 };
+
+uint convVec4ToRGBA8( vec4 val);
 
 void main()
 {
@@ -49,12 +52,12 @@ void main()
 	if (material.occlusionTexture > -1 && texture(uTextures[material.occlusionTexture], fs_in.texCoord).r < 0.1)
 		discard;
 
-	uint cur = atomicAdd(uCounter.value, 1u);
+	uint cur = atomicAdd(uCounterValue, 1u);
 	if (uIsCountMode == 0)
 	{
 		vec4 radiance = vec4(1.0);
 
-		if ((material.emissiveFactor.x > 0.0) || (material.emissiveFactor.y > 0.0) || (material.emissiveFactor.z > 0.0))
+		if (any(greaterThan(material.emissiveFactor, vec3(0.0))))
 		{
 			vec4 emission = vec4(material.emissiveFactor, 1.0);
 			if (material.emissiveTexture > -1)
@@ -74,14 +77,16 @@ void main()
 			}
 
 			vec3 normal = normalize(fs_in.normal);
+			vec3 light = normalize(-uDirectionalLight.direction);
+
 			vec3 lightContribution = vec3(0.0);
 
 			// Calculate light contribution here
-			float NdotL = max(dot(normal, -uDirectionalLight.direction), 0.0);
-			float visibility = 1.0; // TODO(snowapril) : calcShadowCoefficientPCF16(uShadowMaps, fs_in.position);
+			float NdotL = clamp(dot(normal, light), 0.001, 1.0);
+			float visibility = calcVisibility(uShadowMaps, uDirectionalLightShadow, fs_in.position);
 			lightContribution += NdotL * visibility * uDirectionalLight.color * uDirectionalLight.intensity;
 	
-			if ((lightContribution.r == 0.0) && (lightContribution.g == 0.0) && (lightContribution.b == 0.0))
+			if (all(equal(lightContribution, vec3(0.0))))
 				discard;
 
 			radiance = vec4(clamp(lightContribution * color.rgb * color.a, 0.0, 1.0), 1.0);
@@ -91,9 +96,15 @@ void main()
 							   uvec3(0u), 
 							   uvec3(uVoxelResolution));
 
-		uint radianceUI = packUnorm4x8(radiance);
 		uFragmentList[cur].x = voxelPos.x | (voxelPos.y << 12u) | ((voxelPos.z & 0xffu) << 24u);
-		uFragmentList[cur].y = (voxelPos.z >> 8u) << 28u | (radianceUI & 0xfffffffu);
+		uFragmentList[cur].y = (voxelPos.z >> 8u) << 28u | (convVec4ToRGBA8(radiance * 255.0) & 0xfffffffu);
 		// TODO(snowapril) : need somewhere to store opacity
 	}
+}
+
+uint convVec4ToRGBA8( vec4 val) {
+	return (uint(val.w) & 0x000000FF ) << 24U | 
+	(uint(val.z) & 0x000000FF ) << 16U | 
+	(uint(val.y) & 0x000000FF ) << 8U | 
+	(uint(val.x) & 0x000000FF );
 }

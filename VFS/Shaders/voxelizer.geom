@@ -14,14 +14,20 @@ layout( location = 0 ) out GS_OUT {
 	vec3 normal;
 } gs_out;
 
-layout ( std140, set = 3, binding = 0 ) uniform ViewportSize { 
-	uvec2 uViewportSize[3]; 
-};
-
-layout ( std140, set = 3, binding = 1 ) uniform ViewProjMatrix { 
+layout ( std140, set = 3, binding = 0 ) uniform ViewProjection {  
 	mat4 uViewProj[3]; 
 	mat4 uViewProjIt[3]; 
 };
+
+vec2 project(vec3 vertex, uint axis) 
+{
+	return axis == 0 ? vertex.yz : (axis == 1 ? vertex.xz : vertex.xy);
+}
+
+vec3 biasAndScale(vec3 vertex)
+{
+	return (vertex + 1.0) * 0.5;
+}
 
 int getDominantAxis(vec3 pos0, vec3 pos1, vec3 pos2)
 {
@@ -40,9 +46,9 @@ void main()
 	for (int i = 0; i < 3; ++i)
 	{	
 		gl_ViewportIndex 	= axis;
-		gl_Position 		= uViewProj[axis] * gl_in[i].gl_Position;
+		gl_Position 		= vec4(project(gl_in[i].gl_Position.xyz, axis), 1.0, 1.0); // uViewProj[axis] * gl_in[i].gl_Position;
 		gs_out.texCoord 	= gs_in[i].texCoord;
-		gs_out.position 	= gl_in[i].gl_Position.xyz;
+		gs_out.position 	= biasAndScale(gl_in[i].gl_Position.xyz); // gl_in[i].gl_Position.xyz;
 		gs_out.normal 		= gs_in[i].normal;
 		EmitVertex();
 	}
