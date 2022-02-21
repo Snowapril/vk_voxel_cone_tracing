@@ -36,7 +36,7 @@ vec4 convRGBA8ToVec4( uint val)
 void emit(in vec3 position)
 {
 	gl_Position = uCamMatrix.viewProj * vec4(position, 1.0);
-	color = vec4(position, 1.0); // convRGBA8ToVec4(gs_in[0].color) / 255.0;
+	color = convRGBA8ToVec4(gs_in[0].color) / 255.0; // unpackUnorm4x8(gs_in[0].color); // vec4(position, 1.0); // convRGBA8ToVec4(gs_in[0].color) / 255.0;
     gl_PointSize = 32;
 	EmitVertex();
 }
