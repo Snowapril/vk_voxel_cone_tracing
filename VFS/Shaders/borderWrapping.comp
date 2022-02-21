@@ -1,0 +1,37 @@
+#version 450
+layout ( local_size_x = 8, local_size_y = 8, local_size_z = 8 ) in;
+
+layout ( constant_id = 0 ) const int BORDER_WIDTH = 1;
+
+layout (  rgba8, set = 0, binding = 0 ) uniform image3D uClipmapTexture;
+layout ( std140, set = 0, binding = 1 ) uniform BorderWrappingDesc {
+	uint uClipmapResolution;  //  4
+    uint uClipBorderWidth;    //  8
+    uint uFaceCount;          // 12
+    uint uClipRegionCount;    // 16
+};
+
+void main()
+{
+    const uint resolutionWithBorder = uint(uClipmapResolution + uClipBorderWidth);
+    if (any(greaterThanEqual(gl_GlobalInvocationID, uvec3(resolutionWithBorder))))
+    	return;
+
+    if (all(lessThan(ivec3(gl_GlobalInvocationID), ivec3(uClipmapResolution + BORDER_WIDTH))) && 
+        all(greaterThan(ivec3(gl_GlobalInvocationID), ivec3(0))))
+        return;
+
+    ivec3 readPos  = ((ivec3(gl_GlobalInvocationID) + int(uClipmapResolution) - ivec3(BORDER_WIDTH)) & (int(uClipmapResolution) - 1)) + ivec3(BORDER_WIDTH);
+    ivec3 writePos = ivec3(gl_GlobalInvocationID);
+
+    for (int i = 0; i < uClipRegionCount; ++i)
+    {
+        for (int j = 0; j < uFaceCount; ++j)
+        {
+            vec4 texel = imageLoad(uClipmapTexture, readPos + ivec3(resolutionWithBorder * j, 0, 0));
+            imageStore(uClipmapTexture, writePos + ivec3(resolutionWithBorder * j, 0, 0), texel);
+        }
+        readPos.y  += int(resolutionWithBorder);
+        writePos.y += int(resolutionWithBorder);
+    }
+}
