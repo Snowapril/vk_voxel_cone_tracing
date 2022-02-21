@@ -8,7 +8,8 @@ namespace vfs
 	VkSampleCountFlagBits getMaximumSampleCounts(DevicePtr device)
 	{
 		const VkPhysicalDeviceProperties& deviceProperty = device->getDeviceProperty();
-		const VkSampleCountFlags sampleCountLimit = deviceProperty.limits.framebufferDepthSampleCounts;
+		const VkSampleCountFlags sampleCountLimit = deviceProperty.limits.framebufferColorSampleCounts &
+													deviceProperty.limits.framebufferDepthSampleCounts;
 		if (sampleCountLimit & VK_SAMPLE_COUNT_64_BIT) return VK_SAMPLE_COUNT_64_BIT;
 		if (sampleCountLimit & VK_SAMPLE_COUNT_32_BIT) return VK_SAMPLE_COUNT_32_BIT;
 		if (sampleCountLimit & VK_SAMPLE_COUNT_16_BIT) return VK_SAMPLE_COUNT_16_BIT;

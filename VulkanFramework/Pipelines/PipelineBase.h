@@ -20,12 +20,12 @@ namespace vfs
 		virtual ~PipelineBase();
 
 	public:
-		void destroyPipeline(void);
-		bool initialize		(std::shared_ptr<Device> device);
-		bool createPipeline	(const PipelineConfig* pipelineConfig);
-		void bindPipeline	(VkCommandBuffer commandBuffer);
-		void addShaderModule(VkShaderStageFlagBits stage, const char* shaderPath, 
-							 const VkSpecializationInfo* specialInfo);
+		void destroyPipeline	(void);
+		bool initialize			(std::shared_ptr<Device> device);
+		bool createPipeline		(const PipelineConfig* pipelineConfig);
+		void bindPipeline		(VkCommandBuffer commandBuffer);
+		void attachShaderModule	(VkShaderStageFlagBits stage, const char* shaderPath,
+								 const VkSpecializationInfo* specialInfo);
 		
 		virtual VkPipelineBindPoint getBindPoint(void) const = 0;
 
