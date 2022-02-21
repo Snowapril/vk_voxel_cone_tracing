@@ -38,7 +38,7 @@ void main()
 		resolution >>= 1;
 		cmp = uvec3(greaterThanEqual(fragPos, uvec3(resolution)));
 		idx = cur + (cmp.z | (cmp.x << 1) | (cmp.y << 2));  // TODO(snowapril) : why rotation work?
-		cur = uOctree.data[idx].x & 0x3fffffff; // Without MSB flag
+		cur = uOctree.data[idx].x & 0x7fffffff; // Without MSB flag
 		fragPos -= cmp * resolution;
 	} while (cur != 0u && resolution > 1u);
 
