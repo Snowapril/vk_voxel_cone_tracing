@@ -16,14 +16,14 @@ namespace vfs
 		explicit RenderPass(const DevicePtr&device, 
 							const std::vector<VkAttachmentDescription>& attachmentDescs,
 							const std::vector<VkSubpassDependency>& subpassDependencies,
-							const bool isDepthIncluded);
+							const std::vector<VkSubpassDescription>& subpassDescs);
 				~RenderPass();
 
 	public:
 		bool initialize			(const DevicePtr& device,
 								 const std::vector<VkAttachmentDescription>& attachmentDescs,
 								 const std::vector<VkSubpassDependency>& subpassDependencies,
-								 const bool isDepthIncluded);
+								 const std::vector<VkSubpassDescription>& subpassDescs);
 		void destroyRenderPass	(void);
 
 		inline VkRenderPass getHandle(void) const
