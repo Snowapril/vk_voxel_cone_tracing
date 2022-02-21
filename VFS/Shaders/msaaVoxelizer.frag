@@ -2,9 +2,8 @@
 
 #include "gltf.glsl"
 
-#define BORDER_WIDTH 2
-
 layout( constant_id = 0 ) const uint MAX_TEXTURE_NUM = 69;
+layout( constant_id = 1 ) const  int BORDER_WIDTH    = 1;
 
 layout( location = 0 ) in GS_OUT {
 	vec3 position;
@@ -18,15 +17,6 @@ layout ( std430, set = 1, binding = 1) readonly buffer MaterialBuffer
 layout ( set = 1, binding = 2 ) uniform sampler2D uTextures[MAX_TEXTURE_NUM];
 
 layout ( set = 2, binding = 0, rgba8) uniform writeonly image3D uVoxelOpacity;
-
-layout ( set = 2, binding = 1 ) buffer CounterStorageBuffer
-{ 
-	uint value; 
-} uCounter;
-
-layout ( std430, set = 2, binding = 2 ) writeonly buffer ImageCoordBuffer {
-	ivec3 data[];
-} uImageCoordBuffer;
 
 layout ( std140, set = 3, binding = 2 ) uniform VoxelizationDesc {
 	vec3 	uRegionMinCorner;
@@ -57,9 +47,8 @@ ivec3 calculateImageCoords(vec3 worldPos)
 	
 	vec3 clipCoords = worldPosToClipmap(worldPos, uClipMaxExtent);
 
-	ivec3 imageCoords = ivec3(clipCoords * float(uClipmapResolution)) & (uClipmapResolution - 1);
-	// ivec3 imageCoords = ivec3(float(uClipmapResolution) * (0.5 * worldPos + 0.5));
-	imageCoords.z  	+= BORDER_WIDTH;
+	ivec3 imageCoords = ivec3(clipCoords * float(uClipmapResolution)) % uClipmapResolution;
+	imageCoords  	+= ivec3(BORDER_WIDTH);
 	imageCoords.y 	+= int((uClipmapResolution + 2) * uClipLevel);
 	
 	return imageCoords;
@@ -76,11 +65,10 @@ void main()
 		discard;
 
 	ivec3 imageCoord = calculateImageCoords(fs_in.position);
-	uImageCoordBuffer.data[atomicAdd(uCounter.value, 1u)] = imageCoord;
 
 	for (uint i = 0; i < 6; ++i)
 	{
 		imageStore(uVoxelOpacity, imageCoord, vec4(1.0));
-		imageCoord.x += uClipmapResolution + 2;
+		imageCoord.x += uClipmapResolution + 2 * BORDER_WIDTH;
 	}
 }

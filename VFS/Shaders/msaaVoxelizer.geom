@@ -24,11 +24,6 @@ layout ( std140, set = 3, binding = 1 ) uniform ViewProjMatrix {
 	mat4 uViewProjIt[3]; 
 };
 
-vec2 project(vec3 vertex, uint axis) 
-{
-	return axis == 0 ? vertex.yz : (axis == 1 ? vertex.xz : vertex.xy);
-}
-
 int getDominantAxis(vec3 pos0, vec3 pos1, vec3 pos2)
 {
 	vec3 normal = abs(cross(pos1 - pos0, pos2 - pos0));
