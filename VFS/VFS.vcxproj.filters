@@ -15,222 +15,237 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\Common\pch.cpp">
+    <ClCompile Include="GUI\ImGuiUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\main.cpp">
+    <ClCompile Include="GUI\UIRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\UIEngine\UIRenderer.cpp">
+    <ClCompile Include="Util\GLTFLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Common\VertexFormat.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\UIEngine\ImGuiUtil.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\VoxelEngine\Counter.cpp">
+    <ClCompile Include="Counter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\VoxelEngine\SparseVoxelizer.cpp">
+    <ClCompile Include="DirectionalLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\VoxelEngine\OctreeBuilder.cpp">
+    <ClCompile Include="GLTFScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\VoxelEngine\OctreeVisualizer.cpp">
+    <ClCompile Include="LoaderThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\LoaderThread.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Common\Utils.cpp">
+    <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Common\GLTFLoader.cpp">
+    <ClCompile Include="Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Application.cpp">
+    <ClCompile Include="SwapChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Renderer.cpp">
+    <ClCompile Include="RenderPass\Clipmap\BorderWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\SwapChain.cpp">
+    <ClCompile Include="RenderPass\Clipmap\ClipmapCleaner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\GLTFScene.cpp">
+    <ClCompile Include="RenderPass\Clipmap\CopyAlpha.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\GBufferPass.cpp">
+    <ClCompile Include="RenderPass\Clipmap\DownSampler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\VoxelizationPass.cpp">
+    <ClCompile Include="RenderPass\Clipmap\RadianceInjectionPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\RenderPassBase.cpp">
+    <ClCompile Include="RenderPass\Clipmap\VolumeVisualizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\GBufferDebugPass.cpp">
+    <ClCompile Include="RenderPass\Clipmap\VolumeVisualizerPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\VolumeVisualizerPass.cpp">
+    <ClCompile Include="RenderPass\Clipmap\VoxelConeTracingPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\VolumeVisualizer.cpp">
+    <ClCompile Include="RenderPass\Clipmap\VoxelizationPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\ShadowMapPass.cpp">
+    <ClCompile Include="RenderPass\Clipmap\Voxelizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\RadianceInjectionPass.cpp">
+    <ClCompile Include="RenderPass\Octree\OctreeBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\DirectionalLight.cpp">
+    <ClCompile Include="RenderPass\Octree\OctreeVisualizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\Voxelizer.cpp">
+    <ClCompile Include="RenderPass\Octree\OctreeVoxelConeTracing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\RenderPassManager.cpp">
+    <ClCompile Include="RenderPass\Octree\SparseVoxelizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\VoxelConeTracingPass.cpp">
+    <ClCompile Include="RenderPass\Octree\SparseVoxelOctree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\RenderPass\DownSampler.cpp">
+    <ClCompile Include="RenderPass\SpecularFilterPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Common\CPUTimer.cpp">
+    <ClCompile Include="RenderPass\GBufferPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\VoxelEngine\OctreeVoxelConeTracing.cpp">
+    <ClCompile Include="RenderPass\ReflectiveShadowMapPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Camera.cpp">
+    <ClCompile Include="RenderPass\RenderPassBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPass\RenderPassManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPass\ShadowMapPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPass\FinalPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Includes\Common\NonCopyable.h">
+    <ClInclude Include="GUI\ImGuiUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\Utils.h">
+    <ClInclude Include="GUI\UIRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\pch.h">
+    <ClInclude Include="Util\EngineConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VoxelEngine\SparseVoxelizer.h">
+    <ClInclude Include="Util\ForwardDeclarations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VoxelEngine\SparseVoxelOctree.h">
+    <ClInclude Include="Util\GLTFLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\VoxelEngine\SparseVoxelOctree.cpp">
+    <ClInclude Include="Util\GLTFLoader-Impl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\Logger.h">
+    <ClInclude Include="Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Common\Logger.cpp">
+    <ClInclude Include="BoundingBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\Utils-Impl.hpp">
+    <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\UIEngine\UIRenderer.h">
+    <ClInclude Include="Counter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\VertexFormat.h">
+    <ClInclude Include="DirectionalLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\EngineConfig.h">
+    <ClInclude Include="GLTFScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\UIEngine\ImGuiUtil.h">
+    <ClInclude Include="LoaderThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VoxelEngine\Counter.h">
+    <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\GLTFLoader.h">
+    <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\GLTFLoader-Impl.hpp">
+    <ClInclude Include="SwapChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VoxelEngine\OctreeBuilder.h">
+    <ClInclude Include="RenderPass\Clipmap\BorderWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VoxelEngine\OctreeVisualizer.h">
+    <ClInclude Include="RenderPass\Clipmap\ClipmapCleaner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\LoaderThread.h">
+    <ClInclude Include="RenderPass\Clipmap\ClipmapRegion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\SwapChain.h">
+    <ClInclude Include="RenderPass\Clipmap\CopyAlpha.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Renderer.h">
+    <ClInclude Include="RenderPass\Clipmap\DownSampler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Application.h">
+    <ClInclude Include="RenderPass\Clipmap\RadianceInjectionPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\GLTFScene.h">
+    <ClInclude Include="RenderPass\Clipmap\VolumeVisualizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\GBufferPass.h">
+    <ClInclude Include="RenderPass\Clipmap\VolumeVisualizerPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\RenderPassBase.h">
+    <ClInclude Include="RenderPass\Clipmap\VoxelConeTracingPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\GBufferDebugPass.h">
+    <ClInclude Include="RenderPass\Clipmap\VoxelizationPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\VolumeVisualizerPass.h">
+    <ClInclude Include="RenderPass\Clipmap\Voxelizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VolumeVisualizer.h">
+    <ClInclude Include="RenderPass\Octree\OctreeBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\ShadowMapPass.h">
+    <ClInclude Include="RenderPass\Octree\OctreeVisualizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\RadianceInjectionPass.h">
+    <ClInclude Include="RenderPass\Octree\OctreeVoxelConeTracing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\BoundingBox.h">
+    <ClInclude Include="RenderPass\Octree\SparseVoxelizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\RenderPassManager.h">
+    <ClInclude Include="RenderPass\Octree\SparseVoxelOctree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\DirectionalLight.h">
+    <ClInclude Include="RenderPass\SpecularFilterPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\Voxelizer.h">
+    <ClInclude Include="RenderPass\GBufferPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\ClipmapRegion.h">
+    <ClInclude Include="RenderPass\ReflectiveShadowMapPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\VoxelConeTracingPass.h">
+    <ClInclude Include="RenderPass\RenderPassBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\RenderPass\DownSampler.h">
+    <ClInclude Include="RenderPass\RenderPassManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Common\CPUTimer.h">
+    <ClInclude Include="RenderPass\ShadowMapPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\VoxelEngine\OctreeVoxelConeTracing.h">
+    <ClInclude Include="SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Camera.h">
+    <ClInclude Include="RenderPass\FinalPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPass\Clipmap\ClipmapViewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -249,6 +264,5 @@
     <None Include="Shaders\avc.vert" />
     <None Include="Shaders\avc.geom" />
     <None Include="Shaders\octreeNodeMipmapWrite.comp" />
-    <None Include="Includes\RenderPass\VoxelizationPass.h" />
   </ItemGroup>
 </Project>

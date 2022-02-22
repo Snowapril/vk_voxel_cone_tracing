@@ -117,17 +117,17 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;$(MSBuildProjectDirectory);$(MSBuildProjectDirectory)\Includes;$(MSBuildProjectDirectory)\..\Dependencies;$(MSBuildProjectDirectory)\..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;$(MSBuildProjectDirectory);$(MSBuildProjectDirectory)\..\Dependencies;$(MSBuildProjectDirectory)\..</AdditionalIncludeDirectories>
       <TreatSpecificWarningsAsErrors>4242;4254;4265;4599;4605;4608;4800;4826;4928;4946;4986;5031;5032;4263;4264;4545;4546;4547;4548;4549;5038;4062;4165;4191;4287;4296;4339;4350;4370;4388;4444;4464;4555;4557;4571;4577;4596;4598;4619;4628;4643;4647;4654;4686;4749;4767;4768;4774;4777;4786;4822;4837;4841;4842;4868;4905;4906;4917;4931;4962;4987;4988;5022;5023;5024;5025;5029;5034;5035;5036;5042;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <DisableSpecificWarnings>4100;4127;4201;4714;4471;4189;26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>Common\pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(OutputPath)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;VkLayer_utils.lib;imgui-d.lib;vfsvulkanframework-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(MSBuildProjectDirectory)\..\Dependencies\tinyfiledialogs;$(OutputPath)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;VkLayer_utils.lib;imgui-d.lib;tinyfiledialogs-d.lib;vfsvulkanframework-d.lib;vfscommon-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent />
     <PreBuildEvent>
@@ -146,19 +146,19 @@ xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;$(MSBuildProjectDirectory);$(MSBuildProjectDirectory)\Includes;$(MSBuildProjectDirectory)\..\Dependencies;$(MSBuildProjectDirectory)\..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VULKAN_SDK)\Include;$(MSBuildProjectDirectory);$(MSBuildProjectDirectory)\..\Dependencies;$(MSBuildProjectDirectory)\..</AdditionalIncludeDirectories>
       <TreatSpecificWarningsAsErrors>4242;4254;4265;4599;4605;4608;4800;4826;4928;4946;4986;5031;5032;4263;4264;4545;4546;4547;4548;4549;5038;4062;4165;4191;4287;4296;4339;4350;4370;4388;4444;4464;4555;4557;4571;4577;4596;4598;4619;4628;4643;4647;4654;4686;4749;4767;4768;4774;4777;4786;4822;4837;4841;4842;4868;4905;4906;4917;4931;4962;4987;4988;5022;5023;5024;5025;5029;5034;5035;5036;5042;%(TreatSpecificWarningsAsErrors)</TreatSpecificWarningsAsErrors>
       <DisableSpecificWarnings>4100;4127;4201;4714;4471;4189;26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>Common\pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(OutputPath)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;imgui.lib;vfsvulkanframework.lib;VkLayer_utils.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(VULKAN_SDK)\Lib;$(MSBuildProjectDirectory)\..\Dependencies\glfw;$(MSBuildProjectDirectory)\..\Dependencies\imgui;$(MSBuildProjectDirectory)\..\Dependencies\tinyfiledialogs;$(OutputPath)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;imgui.lib;vfsvulkanframework.lib;tinyfiledialogs.lib;VkLayer_utils.lib;vfscommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent />
@@ -170,81 +170,85 @@ xcopy "$(ProjectDir)\Shaders\*.spv" "$(OutputPath)\Shaders" /Y /I /E</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\Application.cpp" />
-    <ClCompile Include="Sources\Camera.cpp" />
-    <ClCompile Include="Sources\Common\CPUTimer.cpp" />
-    <ClCompile Include="Sources\Common\GLTFLoader.cpp" />
-    <ClCompile Include="Sources\Common\Utils.cpp" />
-    <ClCompile Include="Sources\DirectionalLight.cpp" />
-    <ClCompile Include="Sources\GLTFScene.cpp" />
-    <ClCompile Include="Sources\LoaderThread.cpp" />
-    <ClCompile Include="Sources\Renderer.cpp" />
-    <ClCompile Include="Sources\RenderPass\DownSampler.cpp" />
-    <ClCompile Include="Sources\RenderPass\GBufferDebugPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\GBufferPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\RadianceInjectionPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\RenderPassBase.cpp" />
-    <ClCompile Include="Sources\RenderPass\RenderPassManager.cpp" />
-    <ClCompile Include="Sources\RenderPass\ShadowMapPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\VolumeVisualizerPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\VoxelConeTracingPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\VoxelizationPass.cpp" />
-    <ClCompile Include="Sources\RenderPass\Voxelizer.cpp" />
-    <ClCompile Include="Sources\SwapChain.cpp" />
-    <ClCompile Include="Sources\VolumeVisualizer.cpp" />
-    <ClCompile Include="Sources\VoxelEngine\OctreeBuilder.cpp" />
-    <ClCompile Include="Sources\VoxelEngine\Counter.cpp" />
-    <ClCompile Include="Sources\VoxelEngine\OctreeVisualizer.cpp" />
-    <ClCompile Include="Sources\VoxelEngine\OctreeVoxelConeTracing.cpp" />
-    <ClCompile Include="Sources\VoxelEngine\SparseVoxelizer.cpp" />
-    <ClInclude Include="Includes\Application.h" />
-    <ClInclude Include="Includes\BoundingBox.h" />
-    <ClInclude Include="Includes\Camera.h" />
-    <ClInclude Include="Includes\Common\CPUTimer.h" />
-    <ClInclude Include="Includes\DirectionalLight.h" />
-    <ClInclude Include="Includes\GLTFScene.h" />
-    <ClInclude Include="Includes\RenderPass\DownSampler.h" />
-    <ClInclude Include="Includes\LoaderThread.h" />
-    <ClInclude Include="Includes\Common\EngineConfig.h" />
-    <ClInclude Include="Includes\Common\GLTFLoader-Impl.hpp" />
-    <ClInclude Include="Includes\Common\GLTFLoader.h" />
-    <ClInclude Include="Includes\Common\Logger.h" />
-    <ClInclude Include="Includes\Common\pch.h" />
-    <ClInclude Include="Includes\Common\VertexFormat.h" />
-    <ClInclude Include="Includes\Common\NonCopyable.h" />
-    <ClInclude Include="Includes\Renderer.h" />
-    <ClInclude Include="Includes\ClipmapRegion.h" />
-    <ClInclude Include="Includes\RenderPass\GBufferDebugPass.h" />
-    <ClInclude Include="Includes\RenderPass\GBufferPass.h" />
-    <ClInclude Include="Includes\RenderPass\RadianceInjectionPass.h" />
-    <ClInclude Include="Includes\RenderPass\RenderPassBase.h" />
-    <ClInclude Include="Includes\RenderPass\RenderPassManager.h" />
-    <ClInclude Include="Includes\RenderPass\VolumeVisualizerPass.h" />
-    <ClInclude Include="Includes\RenderPass\VoxelConeTracingPass.h" />
-    <ClInclude Include="Includes\RenderPass\Voxelizer.h" />
-    <ClInclude Include="Includes\SwapChain.h" />
-    <ClInclude Include="Includes\UIEngine\ImGuiUtil.h" />
-    <ClInclude Include="Includes\UIEngine\UIRenderer.h" />
-    <ClInclude Include="Includes\VolumeVisualizer.h" />
-    <ClInclude Include="Includes\VoxelEngine\OctreeBuilder.h" />
-    <ClInclude Include="Includes\VoxelEngine\OctreeVisualizer.h" />
-    <ClInclude Include="Includes\Common\Utils.h" />
-    <ClInclude Include="Includes\Common\Utils-Impl.hpp" />
-    <ClInclude Include="Includes\VoxelEngine\OctreeVoxelConeTracing.h" />
-    <ClInclude Include="Includes\VoxelEngine\SparseVoxelOctree.h" />
-    <ClInclude Include="Includes\VoxelEngine\Counter.h" />
-    <ClInclude Include="Includes\VoxelEngine\SparseVoxelizer.h" />
-    <ClCompile Include="Sources\Common\pch.cpp" />
-    <ClInclude Include="Sources\Common\Logger.cpp" />
-    <ClCompile Include="Sources\Common\VertexFormat.cpp" />
-    <ClCompile Include="Sources\UIEngine\ImGuiUtil.cpp" />
-    <ClCompile Include="Sources\UIEngine\UIRenderer.cpp" />
-    <ClInclude Include="Includes\RenderPass\ShadowMapPass.h" />
-    <ClInclude Include="Sources\VoxelEngine\SparseVoxelOctree.cpp" />
-    <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Counter.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="GLTFScene.cpp" />
+    <ClCompile Include="GUI\ImGuiUtil.cpp" />
+    <ClCompile Include="GUI\UIRenderer.cpp" />
+    <ClCompile Include="LoaderThread.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\BorderWrapper.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\ClipmapCleaner.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\CopyAlpha.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\DownSampler.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\RadianceInjectionPass.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\VolumeVisualizer.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\VolumeVisualizerPass.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\VoxelConeTracingPass.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\VoxelizationPass.cpp" />
+    <ClCompile Include="RenderPass\Clipmap\Voxelizer.cpp" />
+    <ClCompile Include="RenderPass\FinalPass.cpp" />
+    <ClCompile Include="RenderPass\SpecularFilterPass.cpp" />
+    <ClCompile Include="RenderPass\GBufferPass.cpp" />
+    <ClCompile Include="RenderPass\Octree\OctreeBuilder.cpp" />
+    <ClCompile Include="RenderPass\Octree\OctreeVisualizer.cpp" />
+    <ClCompile Include="RenderPass\Octree\OctreeVoxelConeTracing.cpp" />
+    <ClCompile Include="RenderPass\Octree\SparseVoxelizer.cpp" />
+    <ClCompile Include="RenderPass\Octree\SparseVoxelOctree.cpp" />
+    <ClCompile Include="RenderPass\ReflectiveShadowMapPass.cpp" />
+    <ClCompile Include="RenderPass\RenderPassBase.cpp" />
+    <ClCompile Include="RenderPass\RenderPassManager.cpp" />
+    <ClCompile Include="RenderPass\ShadowMapPass.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SwapChain.cpp" />
+    <ClCompile Include="Util\GLTFLoader.cpp" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Counter.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="GLTFScene.h" />
+    <ClInclude Include="GUI\ImGuiUtil.h" />
+    <ClInclude Include="GUI\UIRenderer.h" />
+    <ClInclude Include="LoaderThread.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderPass\Clipmap\BorderWrapper.h" />
+    <ClInclude Include="RenderPass\Clipmap\ClipmapCleaner.h" />
+    <ClInclude Include="RenderPass\Clipmap\ClipmapRegion.h" />
+    <ClInclude Include="RenderPass\Clipmap\ClipmapViewer.h" />
+    <ClInclude Include="RenderPass\Clipmap\CopyAlpha.h" />
+    <ClInclude Include="RenderPass\Clipmap\DownSampler.h" />
+    <ClInclude Include="RenderPass\Clipmap\RadianceInjectionPass.h" />
+    <ClInclude Include="RenderPass\Clipmap\VolumeVisualizer.h" />
+    <ClInclude Include="RenderPass\Clipmap\VolumeVisualizerPass.h" />
+    <ClInclude Include="RenderPass\Clipmap\VoxelConeTracingPass.h" />
+    <ClInclude Include="RenderPass\Clipmap\VoxelizationPass.h" />
+    <ClInclude Include="RenderPass\Clipmap\Voxelizer.h" />
+    <ClInclude Include="RenderPass\FinalPass.h" />
+    <ClInclude Include="RenderPass\SpecularFilterPass.h" />
+    <ClInclude Include="RenderPass\GBufferPass.h" />
+    <ClInclude Include="RenderPass\Octree\OctreeBuilder.h" />
+    <ClInclude Include="RenderPass\Octree\OctreeVisualizer.h" />
+    <ClInclude Include="RenderPass\Octree\OctreeVoxelConeTracing.h" />
+    <ClInclude Include="RenderPass\Octree\SparseVoxelizer.h" />
+    <ClInclude Include="RenderPass\Octree\SparseVoxelOctree.h" />
+    <ClInclude Include="RenderPass\ReflectiveShadowMapPass.h" />
+    <ClInclude Include="RenderPass\RenderPassBase.h" />
+    <ClInclude Include="RenderPass\RenderPassManager.h" />
+    <ClInclude Include="RenderPass\ShadowMapPass.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SwapChain.h" />
+    <ClInclude Include="Util\EngineConfig.h" />
+    <ClInclude Include="Util\ForwardDeclarations.h" />
+    <ClInclude Include="Util\GLTFLoader-Impl.hpp" />
+    <ClInclude Include="Util\GLTFLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Includes\RenderPass\VoxelizationPass.h" />
     <None Include="Shaders\avc.geom" />
     <None Include="Shaders\octreeNodeAlloc.comp" />
     <None Include="Shaders\octreeNodeFlag.comp" />
