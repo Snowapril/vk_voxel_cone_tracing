@@ -3,136 +3,137 @@ layout ( local_size_x = 8, local_size_y = 8, local_size_z = 8 ) in;
 
 layout ( constant_id = 0 ) const int BORDER_WIDTH = 1;
 
-layout (  rgba8, set = 0, binding = 0 ) uniform image3D uOpacityClipmap;
+layout (  rgba8, set = 0, binding = 0 ) uniform image3D uRadianceClipnap;
 layout ( std140, set = 0, binding = 1 ) uniform DownSampleDesc {
-	ivec3 	uPrevRegionMinCorner;  	// 12
-	int 	uClipLevel;				// 16
-	int 	uClipmapResolution;		// 20
-	int 	uDownSampleRegionSize;	// 24
+    ivec3   uPrevRegionMinCorner;   // 12
+    int     uClipLevel;             // 16
+    int     uClipmapResolution;     // 20
+    int     uDownSampleRegionSize;  // 24
 };
 
 const ivec3 OFFSETS[8] = {
-	ivec3(0, 0, 0),
-	ivec3(1, 0, 0),
-	ivec3(0, 1, 0),
-	ivec3(1, 1, 0),
-	ivec3(0, 0, 1),
-	ivec3(1, 0, 1),
-	ivec3(0, 1, 1),
-	ivec3(1, 1, 1)
+    ivec3(0, 0, 0),
+    ivec3(1, 0, 0),
+    ivec3(0, 1, 0),
+    ivec3(1, 1, 0),
+    ivec3(0, 0, 1),
+    ivec3(1, 0, 1),
+    ivec3(0, 1, 1),
+    ivec3(1, 1, 1)
 };
 
-ivec3 	calculateImageCoords(ivec3 p, int resolution);
-void 	downSample			(ivec3 positions[8], out float downSampleResult[6], int resolution);
+ivec3   calculateImageCoords(ivec3 position, int resolution);
+void    downSample          (ivec3 positions[8], out vec4 downSampleResult[6], int resolution);
 
 void main()
 {
     uint halfResolution = uClipmapResolution >> 1;
     if (any(greaterThanEqual(gl_GlobalInvocationID, uvec3(halfResolution))))
-    	return;
+        return;
 
     ivec3 curLevelPos  = (uPrevRegionMinCorner >> 1) + ivec3(gl_GlobalInvocationID);
     ivec3 prevLevelPos = (curLevelPos << 1);
     
-    ivec3 imageWritePos 	= calculateImageCoords( curLevelPos, uClipmapResolution);
+    ivec3 imageWritePos     = calculateImageCoords( curLevelPos, uClipmapResolution);
     ivec3 prevImagePosStart = calculateImageCoords(prevLevelPos, uClipmapResolution);
 
-    int resolution 	= uClipmapResolution + BORDER_WIDTH * 2;
-    imageWritePos 	+= ivec3(BORDER_WIDTH);
+    int resolution  = uClipmapResolution + BORDER_WIDTH * 2;
+    imageWritePos   += ivec3(BORDER_WIDTH);
     imageWritePos.y += resolution * uClipLevel;
 
     ivec3 imagePositions[8];
     for (int i = 0; i < 8; ++i)
     {
-    	imagePositions[i] 	= prevImagePosStart + OFFSETS[i];
-    	imagePositions[i] 	+= ivec3(BORDER_WIDTH);
-    	imagePositions[i].y += resolution * (uClipLevel - 1);
+        imagePositions[i]   = prevImagePosStart + OFFSETS[i];
+        imagePositions[i]   += ivec3(BORDER_WIDTH);
+        imagePositions[i].y += resolution * (uClipLevel - 1);
     }
 
-    float downSampleResult[6];
+    vec4 downSampleResult[6];
     downSample(imagePositions, downSampleResult, resolution);
 
     vec3 center = vec3(uPrevRegionMinCorner >> 1) + vec3(halfResolution >> 1);
     vec3 distanceToCenter = abs(vec3(curLevelPos) + 0.5 - center) - 0.5;
-    float lerpFactor = 0.0;
     float invDownSampleRegionSize = 1.0 / (uDownSampleRegionSize + 1.0);
     if (any(greaterThanEqual(distanceToCenter, vec3((halfResolution >> 1) - uDownSampleRegionSize))))
     {
-    	lerpFactor = max(distanceToCenter.x, max(distanceToCenter.y, distanceToCenter.z)) -
-    				((halfResolution >> 1) - uDownSampleRegionSize) + 1.0;
-    	lerpFactor = lerpFactor * invDownSampleRegionSize;
+        float lerpFactor = max(distanceToCenter.x, max(distanceToCenter.y, distanceToCenter.z)) -
+                    ((halfResolution >> 1) - uDownSampleRegionSize) + 1.0;
+        lerpFactor = lerpFactor * invDownSampleRegionSize;
     }
 
     for (int i = 0; i < 6; ++i)
     {
-    	ivec3 imagePos = imageWritePos + ivec3(i * resolution, 0, 0);
-    	vec4 opacity = imageLoad(uOpacityClipmap, imagePos);
-    	opacity.a = mix(downSampleResult[i], opacity.r, lerpFactor);
-    	opacity.g = opacity.a;
-    	imageStore(uOpacityClipmap, imagePos, opacity);
+        ivec3 imagePos = imageWritePos + ivec3(i * resolution, 0, 0);
+        downSampleResult[i] = mix(
+            downSampleResult[i],
+            imageLoad(uRadianceClipnap, imagePos),
+            lerpFactor
+        );
+        imageStore(uRadianceClipnap, imagePos, downSampleResult[i]);
     }
 }
 
 void fetchTexelBlock(int faceIndex, ivec3 positions[8], out vec4 values[8], int resolution)
 {
-	ivec3 faceOffset = ivec3(resolution * faceIndex, 0, 0);
-	values[0] = imageLoad(uOpacityClipmap, positions[0] + faceOffset);
-	values[1] = imageLoad(uOpacityClipmap, positions[1] + faceOffset);
-	values[2] = imageLoad(uOpacityClipmap, positions[2] + faceOffset);
-	values[3] = imageLoad(uOpacityClipmap, positions[3] + faceOffset);
-	values[4] = imageLoad(uOpacityClipmap, positions[4] + faceOffset);
-	values[5] = imageLoad(uOpacityClipmap, positions[5] + faceOffset);
-	values[6] = imageLoad(uOpacityClipmap, positions[6] + faceOffset);
-	values[7] = imageLoad(uOpacityClipmap, positions[7] + faceOffset);
+    ivec3 faceOffset = ivec3(resolution * faceIndex, 0, 0);
+    values[0] = imageLoad(uRadianceClipnap, positions[0] + faceOffset);
+    values[1] = imageLoad(uRadianceClipnap, positions[1] + faceOffset);
+    values[2] = imageLoad(uRadianceClipnap, positions[2] + faceOffset);
+    values[3] = imageLoad(uRadianceClipnap, positions[3] + faceOffset);
+    values[4] = imageLoad(uRadianceClipnap, positions[4] + faceOffset);
+    values[5] = imageLoad(uRadianceClipnap, positions[5] + faceOffset);
+    values[6] = imageLoad(uRadianceClipnap, positions[6] + faceOffset);
+    values[7] = imageLoad(uRadianceClipnap, positions[7] + faceOffset);
 }
 
-ivec3 calculateImageCoords(ivec3 p, int resolution)
+ivec3 calculateImageCoords(ivec3 position, int resolution)
 {
-	return (p + ivec3(resolution) * (abs(p / resolution) + 1)) & (resolution - 1);
+    return (position + ivec3(resolution) * (abs(position / resolution) + 1)) & (resolution - 1);
 }
 
-void downSample(ivec3 positions[8], out float downSampleResult[6], int resolution)
+void downSample(ivec3 positions[8], out vec4 downSampleResult[6], int resolution)
 {
-	vec4 values[8];
-	// positive x
-	fetchTexelBlock(0, positions, values, resolution);
-	downSampleResult[0] =  (values[0].a + (1.0 - values[0].a) * values[1].a +
-                            values[2].a + (1.0 - values[2].a) * values[3].a +
-                            values[4].a + (1.0 - values[4].a) * values[5].a +
-                            values[6].a + (1.0 - values[6].a) * values[7].a) * 0.25;
+    vec4 values[8];
+    // positive x
+    fetchTexelBlock(0, positions, values, resolution);
+    downSampleResult[0] =  (values[0] + (1.0 - values[0].a) * values[1] +
+                            values[2] + (1.0 - values[2].a) * values[3] +
+                            values[4] + (1.0 - values[4].a) * values[5] +
+                            values[6] + (1.0 - values[6].a) * values[7]) * 0.25;
 
     // negative x
-	fetchTexelBlock(1, positions, values, resolution);
-	downSampleResult[1] =  (values[1].a + (1.0 - values[1].a) * values[0].a +
-                            values[3].a + (1.0 - values[3].a) * values[2].a +
-                            values[5].a + (1.0 - values[5].a) * values[4].a +
-                            values[7].a + (1.0 - values[7].a) * values[6].a) * 0.25;
+    fetchTexelBlock(1, positions, values, resolution);
+    downSampleResult[1] =  (values[1] + (1.0 - values[1].a) * values[0] +
+                            values[3] + (1.0 - values[3].a) * values[2] +
+                            values[5] + (1.0 - values[5].a) * values[4] +
+                            values[7] + (1.0 - values[7].a) * values[6]) * 0.25;
     
     // positive y
-	fetchTexelBlock(2, positions, values, resolution);
-	downSampleResult[2] =  (values[0].a + (1.0 - values[0].a) * values[2].a +
-                            values[1].a + (1.0 - values[1].a) * values[3].a +
-                            values[4].a + (1.0 - values[4].a) * values[6].a +
-                            values[5].a + (1.0 - values[5].a) * values[7].a) * 0.25;
+    fetchTexelBlock(2, positions, values, resolution);
+    downSampleResult[2] =  (values[0] + (1.0 - values[0].a) * values[2] +
+                            values[1] + (1.0 - values[1].a) * values[3] +
+                            values[4] + (1.0 - values[4].a) * values[6] +
+                            values[5] + (1.0 - values[5].a) * values[7]) * 0.25;
 
     // negative y
-	fetchTexelBlock(3, positions, values, resolution);
-	downSampleResult[3] =  (values[2].a + (1.0 - values[2].a) * values[0].a +
-                            values[3].a + (1.0 - values[3].a) * values[1].a +
-                            values[6].a + (1.0 - values[6].a) * values[4].a +
-                            values[7].a + (1.0 - values[7].a) * values[5].a) * 0.25;
+    fetchTexelBlock(3, positions, values, resolution);
+    downSampleResult[3] =  (values[2] + (1.0 - values[2].a) * values[0] +
+                            values[3] + (1.0 - values[3].a) * values[1] +
+                            values[6] + (1.0 - values[6].a) * values[4] +
+                            values[7] + (1.0 - values[7].a) * values[5]) * 0.25;
 
     // positive z
-	fetchTexelBlock(4, positions, values, resolution);
-	downSampleResult[4] =  (values[0].a + (1.0 - values[0].a) * values[4].a +
-                            values[1].a + (1.0 - values[1].a) * values[5].a +
-                            values[2].a + (1.0 - values[2].a) * values[6].a +
-                            values[3].a + (1.0 - values[3].a) * values[7].a) * 0.25;
+    fetchTexelBlock(4, positions, values, resolution);
+    downSampleResult[4] =  (values[0] + (1.0 - values[0].a) * values[4] +
+                            values[1] + (1.0 - values[1].a) * values[5] +
+                            values[2] + (1.0 - values[2].a) * values[6] +
+                            values[3] + (1.0 - values[3].a) * values[7]) * 0.25;
     
     // negative z
-	fetchTexelBlock(5, positions, values, resolution);
-	downSampleResult[5] =  (values[4].a + (1.0 - values[4].a) * values[0].a +
-                            values[5].a + (1.0 - values[5].a) * values[1].a +
-                            values[6].a + (1.0 - values[6].a) * values[2].a +
-                            values[7].a + (1.0 - values[7].a) * values[3].a) * 0.25;
+    fetchTexelBlock(5, positions, values, resolution);
+    downSampleResult[5] =  (values[4] + (1.0 - values[4].a) * values[0] +
+                            values[5] + (1.0 - values[5].a) * values[1] +
+                            values[6] + (1.0 - values[6].a) * values[2] +
+                            values[7] + (1.0 - values[7].a) * values[3]) * 0.25;
 }
