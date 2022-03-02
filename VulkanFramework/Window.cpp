@@ -11,10 +11,23 @@ namespace vfs
 	void	ProcessCursorPosCallback	(GLFWwindow* window, double xpos, double ypos);
 	void	ProcessWindowResizeCallback	(GLFWwindow* window, int width, int height);
 
-	Window::Window(const char* title, int width, int height)
+	Window::Window(const char* title, uint32_t width, uint32_t height)
 	{
-		// Initialization call here
-		assert(initialize(title, width, height) == true);
+		assert(initGLFW() == true);
+		assert(createWindow(title, width, height) == true);
+		assert(initEvents() == true);
+	}
+
+	Window::Window(const char* title, float aspectRatio)
+	{
+		assert(initGLFW() == true);
+
+		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		const uint32_t width  = static_cast<uint32_t>(mode->width  * aspectRatio);
+		const uint32_t height = static_cast<uint32_t>(mode->height * aspectRatio);
+		assert(createWindow(title, width, height) == true);
+
+		assert(initEvents() == true);
 	}
 
 	Window::~Window()
@@ -31,33 +44,48 @@ namespace vfs
 		glfwTerminate();
 	}
 
-	bool Window::initialize(const char* title, int width, int height)
-	{
-		_title	= title;
-		_extent = glm::vec2(width, height);
 
+	bool Window::initGLFW(void)
+	{
 		if (glfwInit() == GLFW_FALSE)
 		{
 			VFS_ERROR << "Failed to initialize GLFW";
 			return false;
 		}
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-
-		_window = glfwCreateWindow(_extent.x, _extent.y, _title, nullptr, nullptr);
-
 		if (glfwVulkanSupported() == 0)
 		{
 			VFS_ERROR << "This device does not support Vulkan";
 			return false;
 		}
+		
+		return true;
+	}
 
+	bool Window::createWindow(const char* title, uint32_t width, uint32_t height)
+	{
+		_title	= title;
+		_extent = glm::vec2(width, height);
+		
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		_window = glfwCreateWindow(_extent.x, _extent.y, _title, nullptr, nullptr);
+		if (_window == nullptr)
+		{
+			VFS_ERROR << "Failed to create GLFW window handle";
+			return false;
+		}
+
+		return true;
+	}
+
+	bool Window::initEvents(void)
+	{
 		glfwSetWindowUserPointer(_window, this);
 		glfwSetFramebufferSizeCallback(_window, ProcessWindowResizeCallback);
 		glfwSetCursorPosCallback(_window, ProcessCursorPosCallback);
 		glfwSetErrorCallback(DebugUtils::GlfwDebugCallback);
-
+		
 		return true;
 	}
 

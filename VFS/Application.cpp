@@ -278,7 +278,8 @@ namespace vfs
 
     bool Application::initializeVulkanDevice(void)
     {
-        _window = std::make_shared<vfs::Window>(DEFAULT_APP_TITLE, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+        constexpr float aspectRatio = 4.0f / 5.0f;
+        _window = std::make_shared<vfs::Window>(DEFAULT_APP_TITLE, aspectRatio);
         _device = std::make_shared<vfs::Device>(DEFAULT_APP_TITLE);
 
         VkSurfaceKHR surface = _window->createWindowSurface(_device->getVulkanInstance());

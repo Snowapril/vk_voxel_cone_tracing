@@ -18,12 +18,12 @@ namespace vfs
 		using CursorPosCallback		= std::function<void(double xpos, double ypos)>;
 		using WindowResizeCallback	= std::function<void(int, int)>;
 
-		explicit Window(const char* title, int width, int height);
+		explicit Window(const char* title, uint32_t width, uint32_t height);
+		explicit Window(const char* title, float aspectRatio);
 				~Window();
 
 	public:
 		void		 destroyWindow		 (void);
-		bool		 initialize			 (const char* title, int width, int height);
 		void		 processKeyInput	 (void);
 		void		 processCursorPos	 (double xpos, double ypos);
 		void		 processWindowResize (int width, int height);
@@ -61,6 +61,11 @@ namespace vfs
 		{
 			_wasWindowResized = flag;
 		}
+	private:
+		bool initGLFW		(void);
+		bool createWindow	(const char* title, uint32_t width, uint32_t height);
+		bool initEvents		(void);
+
 	private:
 		std::vector<KeyCallback>			_keyCallbacks;
 		std::vector<CursorPosCallback>		_cursorPosCallbacks;
